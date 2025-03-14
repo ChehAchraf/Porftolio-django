@@ -13,7 +13,7 @@
     <header class="fixed w-full z-40 transition-all duration-300" id="header">
         <div class="container mx-auto px-4 py-4 flex justify-between items-center">
             <a href="index.html" class="text-2xl font-bold">
-                <span class="gradient-text">&lt;/&gt;</span> <span class="hidden sm:inline">Achraf Chehboun</span>
+                <span class="gradient-text">&lt;/&gt;</span> <span class="hidden sm:inline">{{ ashraf.name }}</span>
             </a>
             
             <nav class="hidden md:flex items-center space-x-8">
@@ -59,11 +59,11 @@
                 <div class="md:w-1/2 mb-12 md:mb-0" data-aos="fade-right" data-aos-duration="1000">
                     <div class="text-sm font-medium text-primary mb-4 tracking-wider">SOFTWARE ENGINEER</div>
                     <h1 class="text-4xl md:text-6xl font-bold mb-6">
-                        Hi, I'm <span class="gradient-text">Achraf Chehboun</span>
-                        <div class="text-2xl md:text-3xl mt-4 typing-demo">Full Stack Developer</div>
+                        Hi, I'm <span class="gradient-text">{{ ashraf.name }}</span>
+                        <div class="text-2xl md:text-3xl mt-4 typing-demo">{{ ashraf.title }}</div>
                     </h1>
                     <p class="text-gray-300 text-lg mb-8">
-                        I craft high-performance, scalable applications with modern technologies. Specializing in both frontend and backend development to create seamless digital experiences.
+                        {{ ashraf.bio }}
                     </p>
                     <div class="flex flex-wrap gap-4">
                         <a href="#contact" class="gradient-border bg-darker px-8 py-3 rounded-md text-light font-medium inline-flex items-center">
@@ -97,18 +97,18 @@
                     <div class="relative">
                         <div class="w-64 h-64 md:w-80 md:h-80 rounded-full bg-gradient-to-r from-primary to-secondary absolute blur-3xl opacity-20 animate-pulse"></div>
                         <div class="w-64 h-64 md:w-80 md:h-80 rounded-full bg-darker border-4 border-primary/30 relative z-10 overflow-hidden floating">
-                            <img src="https://via.placeholder.com/400x400" alt="Profile" class="w-full h-full object-cover">
+                            <img src="{{ ashraf.image.url }}" alt="Profile" class="w-full h-full object-cover">
                         </div>
                         <div class="absolute -bottom-4 -right-4 bg-darker p-4 rounded-lg border border-gray-700 z-20 shadow-xl">
                             <div class="flex items-center space-x-2">
                                 <div class="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
-                                <span class="text-sm font-medium">Available for work</span>
+                                <span class="text-sm font-medium">{{ ashraf.status }}</span>
                             </div>
                         </div>
                         <div class="absolute -top-4 -left-4 bg-darker p-4 rounded-lg border border-gray-700 z-20 shadow-xl">
                             <div class="flex items-center space-x-2">
                                 <div class="w-3 h-3 bg-primary rounded-full"></div>
-                                <span class="text-sm font-medium">2+ years experience</span>
+                                <span class="text-sm font-medium">{{ ashraf.years_of_experience }} Years</span>
                             </div>
                         </div>
                     </div>
