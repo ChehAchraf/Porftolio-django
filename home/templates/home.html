@@ -149,4 +149,151 @@
         </div>
     </section>
 
+        <!-- About Section -->
+    <section id="about" class="py-20 bg-darker relative">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16" data-aos="fade-up">
+                <div class="text-sm font-medium text-primary mb-2 tracking-wider">ABOUT ME</div>
+                <h2 class="text-3xl font-bold mb-4">Know Me More</h2>
+                <div class="w-20 h-1 bg-gradient-to-r from-primary to-secondary mx-auto"></div>
+            </div>
+            
+            <div class="flex flex-col md:flex-row items-center gap-12">
+                <div class="md:w-1/2" data-aos="fade-right" data-aos-duration="1000">
+                    <h3 class="text-2xl font-bold mb-4">I'm <span class="gradient-text">Achraf Chehboun</span>, a Software Engineer</h3>
+                    <p class="text-gray-300 mb-6">
+                        I am a software engineer with a passion for building scalable and efficient software. With expertise in both front-end and back-end technologies, I blend technical prowess with analytical thinking gained from my unique background in law and political science.
+                    </p>
+                    <p class="text-gray-300 mb-8">
+                        My portfolio showcases diverse projects ranging from educational platforms to financial applications, demonstrating my ability to build comprehensive digital experiences using HTML, CSS, JavaScript, PHP, Python, and frameworks like Laravel and Django.
+                    </p>
+                    <div class="grid grid-cols-2 gap-6 mb-8">
+                        <div>
+                            <div class="text-3xl font-bold gradient-text mb-2">{{ashraf.years_of_experience}}+</div>
+                            <div class="text-gray-400">Years Experience</div>
+                        </div>
+                        <div>
+                            <div class="text-3xl font-bold gradient-text mb-2">{{ashraf.completed_projects}}+</div>
+                            <div class="text-gray-400">Projects Completed</div>
+                        </div>
+                        <div>
+                            <div class="text-3xl font-bold gradient-text mb-2">{{ashraf.happy_clients}}+</div>
+                            <div class="text-gray-400">Happy Clients</div>
+                        </div>
+                    </div>
+                    
+                    <a href="{{ashraf.cv}}" download class="gradient-border bg-darker px-8 py-3 rounded-md text-light font-medium inline-flex items-center">
+                        <span>Download CV</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                        </svg>
+                    </a>
+                </div>
+                
+                <div class="md:w-1/2" data-aos="fade-left" data-aos-duration="1000">
+                    <div class="grid grid-cols-2 gap-6">
+                        <div class="bg-gray-900 p-6 rounded-lg card-hover">
+                            <div class="text-4xl text-primary mb-4">{{ashraf.years_of_experience}}+</div>
+                            <div class="text-xl font-semibold mb-2">Years Experience</div>
+                            <p class="text-gray-400">Professional development experience across various industries</p>
+                        </div>
+                        <div class="bg-gray-900 p-6 rounded-lg card-hover">
+                            <div class="text-4xl text-primary mb-4">{{ashraf.completed_projects}}+</div>
+                            <div class="text-xl font-semibold mb-2">Projects Completed</div>
+                            <p class="text-gray-400">Successfully delivered projects for clients worldwide</p>
+                        </div>
+                        <div class="bg-gray-900 p-6 rounded-lg card-hover">
+                            <div class="text-4xl text-primary mb-4">{{ashraf.happy_clients}}+</div>
+                            <div class="text-xl font-semibold mb-2">Happy Clients</div>
+                            <p class="text-gray-400">Satisfied clients who have provided positive feedback</p>
+                        </div>
+                        <div class="bg-gray-900 p-6 rounded-lg card-hover">
+                            <div class="text-4xl text-primary mb-4">{{ashraf.awards}}+</div>
+                            <div class="text-xl font-semibold mb-2">Awards Won</div>
+                            <p class="text-gray-400">Recognition for excellence in web development</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+        <!-- Skills Section -->
+    <section id="skills" class="py-20 bg-dark">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16" data-aos="fade-up">
+                <div class="text-sm font-medium text-primary mb-2 tracking-wider">MY SKILLS</div>
+                <h2 class="text-3xl font-bold mb-4">Technical Expertise</h2>
+                <div class="w-20 h-1 bg-gradient-to-r from-primary to-secondary mx-auto"></div>
+            </div>
+            
+            <div class="grid md:grid-cols-2 gap-12">
+                <div data-aos="fade-right" data-aos-duration="1000">
+                    <h3 class="text-2xl font-bold mb-6">Frontend Development</h3>
+                    
+                    <div class="space-y-6">
+                    
+                        <div>
+                        {% for tech_fornt in front_end_technologies %}
+                            <h4 class="text-lg font-medium mb-2">{{tech_fornt.name}}</h4>
+                            <div class="progress-bar">
+                                <div class="progress-bar-fill" style="width: {{tech_fornt.percent}}"></div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    
+                </div>
+                
+                <div data-aos="fade-left" data-aos-duration="1000">
+                    <h3 class="text-2xl font-bold mb-6">Backend Development</h3>
+                    
+                    <div class="space-y-6">
+                    {% for tech_back in back_end_technologies %}
+                        <div>
+                            <h4 class="text-lg font-medium mb-2">{{tech_back.name}}</h4>   
+                            <div class="progress-bar">
+                                <div class="progress-bar-fill" style="width: {{tech_back.percent}}"></div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                    </div>
+                </div>  
+            </div>
+            
+            <div class="mt-16 grid grid-cols-2 md:grid-cols-4 gap-6" data-aos="fade-up" data-aos-delay="200">
+                <div class="bg-gray-900 p-6 rounded-lg text-center card-hover">
+                    <div class="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-code text-primary text-2xl"></i>
+                    </div>
+                    <h4 class="font-semibold mb-2">Clean Code</h4>
+                    <p class="text-gray-400 text-sm">Writing maintainable, readable code</p>
+                </div>
+                
+                <div class="bg-gray-900 p-6 rounded-lg text-center card-hover">
+                    <div class="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-mobile-alt text-primary text-2xl"></i>
+                    </div>
+                    <h4 class="font-semibold mb-2">Responsive Design</h4>
+                    <p class="text-gray-400 text-sm">Creating layouts that work on all devices</p>
+                </div>
+                
+                <div class="bg-gray-900 p-6 rounded-lg text-center card-hover">
+                    <div class="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-tachometer-alt text-primary text-2xl"></i>
+                    </div>
+                    <h4 class="font-semibold mb-2">Performance</h4>
+                    <p class="text-gray-400 text-sm">Optimizing for speed and efficiency</p>
+                </div>
+                
+                <div class="bg-gray-900 p-6 rounded-lg text-center card-hover">
+                    <div class="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-universal-access text-primary text-2xl"></i>
+                    </div>
+                    <h4 class="font-semibold mb-2">Accessibility</h4>
+                    <p class="text-gray-400 text-sm">Building inclusive web applications</p>
+                </div>
+            </div>
+        </div>
+    </section>
 {% endblock %}
