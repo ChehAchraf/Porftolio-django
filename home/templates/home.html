@@ -296,4 +296,61 @@
             </div>
         </div>
     </section>
+
+        <!-- Projects Section -->
+    <section id="projects" class="py-20 bg-darker">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16" data-aos="fade-up">
+                <div class="text-sm font-medium text-primary mb-2 tracking-wider">MY WORK</div>
+                <h2 class="text-3xl font-bold mb-4">Featured Projects</h2>
+                <div class="w-20 h-1 bg-gradient-to-r from-primary to-secondary mx-auto"></div>
+                <p class="text-gray-400 max-w-2xl mx-auto mt-4">
+                    Here are some of my recent projects that showcase my skills and expertise in full-stack development.
+                </p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Project Card 1 -->
+                {%  for project in project  %}
+                <div class="bg-dark rounded-lg overflow-hidden group card-hover" data-aos="fade-up" data-aos-delay="100">
+                    <div class="relative overflow-hidden h-64">
+                        <img src="{{ project.image.url }}" alt="E-commerce Platform" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                        <div class="absolute inset-0 bg-gradient-to-t from-dark to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end">
+                            <div class="p-6">
+                                <div class="flex space-x-3 mb-4">
+                                    <a href="{% if project.live_link == 'none'%}#{% else %}{{ project.live_link }}{% endif %}" target="_blank" class="bg-primary hover:bg-secondary text-white px-4 py-2 rounded-md transition-colors text-sm">
+                                        Live Demo
+                                    </a>
+                                    <a href="{% if project.github_link == 'none'%}#{% else %}{{ project.github_link }}{% endif %}" target="_blank" class="bg-gray-800 hover:bg-gray-700 text-white px-4 py-2 rounded-md transition-colors text-sm">
+                                        Source Code
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2">{{ project.title }}</h3>
+                        <p class="text-gray-400 mb-4">
+                            {{ project.description|truncatechars:200}}
+                        </p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            {% for technology in project.technology.all %}
+                            <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-xs">{{ technology }}</span>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            
+            <div class="text-center mt-12" data-aos="fade-up">
+                <a href="#" class="gradient-border bg-darker px-8 py-3 rounded-md text-light font-medium inline-flex items-center">
+                    <span>View All Projects</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </section>
 {% endblock %}
