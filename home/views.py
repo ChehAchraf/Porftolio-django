@@ -7,4 +7,4 @@ def home(request):
     technichal_expertise = TechnichalExpertise.objects.all()
     technology = Technology.objects.all()
     project = Project.objects.all()
-    return render(request, 'home.html' , {'ashraf':personal_info})
+    return render(request, 'home.html' , {'ashraf':personal_info,'technology':technology})

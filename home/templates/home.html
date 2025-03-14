@@ -130,4 +130,23 @@
         </div>
     </section>
 
+        <!-- Tech Stack Section -->
+    <section class="py-20 bg-gray-900">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16" data-aos="fade-up">
+                <h2 class="text-3xl font-bold mb-4">My Tech Stack</h2>
+                <p class="text-gray-400 max-w-2xl mx-auto">Technologies I've been working with recently</p>
+            </div>
+            
+            <div class="grid grid-cols-3 md:grid-cols-6 gap-8 items-center justify-items-center" data-aos="fade-up" data-aos-delay="200">
+                {% for tech in technology %}
+                <div class="tech-stack-item p-4 text-center grayscale hover:grayscale-0 transition-all">
+                    <img src="{{tech.icon_url}}" alt="{{tech.name}}" class="w-16 h-16">
+                    <h3 class="text-sm font-medium">{{ tech.name }}</h3>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+
 {% endblock %}

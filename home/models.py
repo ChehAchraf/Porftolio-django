@@ -28,7 +28,7 @@ class PersonalInfo(models.Model):
 
 class Technology(models.Model):
     name = models.CharField(max_length=200)
-    icon = models.ImageField(upload_to='technology/')   
+    icon_url = models.CharField(max_length=200)   
 
     def __str__(self):
         return self.name
