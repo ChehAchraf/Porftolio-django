@@ -1,16 +1,12 @@
 {
-    "builds": [
-        {
-            "src": "portfolio/wsgi.py",
-            "use": "@vercel/python",
-            "config": { "maxLambdaSize": "15mb", "runtime": "python3.9" }
-        }
-    ],
+    "version": 2,
+    "builds": [],
+    "installCommand": "pip install -r requirements.txt",
+    "buildCommand": "python manage.py collectstatic --noinput",
     "routes": [
         {
             "src": "/(.*)",
             "dest": "portfolio/wsgi.py"
         }
-    ],
-    "installCommand": "pip install -r requirements.txt"
+    ]
 }
