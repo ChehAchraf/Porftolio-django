@@ -1,0 +1,162 @@
+{% extends 'master.html' %}
+
+{% block extrahead %}
+<!-- Add Swiper CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+{% endblock %}
+
+{% block content %}
+<!-- Vanta.js Background -->
+    <div id="vanta-bg"></div>
+    
+    <!-- Preloader -->
+    <div id="preloader" class="fixed inset-0 bg-darker z-50 flex items-center justify-center">
+        <div class="w-16 h-16 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
+    </div>
+    
+    <!-- Header -->
+    <header class="fixed w-full z-40 transition-all duration-300" id="header">
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <a href="index.html" class="text-2xl font-bold">
+                <span class="gradient-text">&lt;/&gt;</span> <span class="hidden sm:inline">DevMaster</span>
+            </a>
+            
+            <nav class="hidden md:flex items-center space-x-8">
+                <a href="index.html#home" class="text-light hover:text-primary transition-colors relative nav-link">Home</a>
+                <a href="index.html#about" class="text-light hover:text-primary transition-colors relative nav-link">About</a>
+                <a href="index.html#skills" class="text-light hover:text-primary transition-colors relative nav-link">Skills</a>
+                <a href="projects.html" class="text-primary transition-colors relative nav-link">Projects</a>
+                <a href="index.html#services" class="text-light hover:text-primary transition-colors relative nav-link">Services</a>
+                <a href="index.html#contact" class="text-light hover:text-primary transition-colors relative nav-link">Contact</a>
+            </nav>
+            
+            <a href="index.html#contact" class="gradient-border bg-darker px-6 py-2 text-light rounded-md hidden md:block">
+                Hire Me
+            </a>
+            
+            <button class="md:hidden text-light" id="menu-toggle">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+            </button>
+        </div>
+        
+        <!-- Mobile menu -->
+        <div class="md:hidden hidden bg-darker/90 backdrop-blur-md w-full absolute" id="mobile-menu">
+            <div class="container mx-auto px-4 py-4">
+                <ul class="flex flex-col space-y-4">
+                    <li><a href="index.html#home" class="block py-2 text-light hover:text-primary transition-colors">Home</a></li>
+                    <li><a href="index.html#about" class="block py-2 text-light hover:text-primary transition-colors">About</a></li>
+                    <li><a href="index.html#skills" class="block py-2 text-light hover:text-primary transition-colors">Skills</a></li>
+                    <li><a href="projects.html" class="block py-2 text-primary transition-colors">Projects</a></li>
+                    <li><a href="index.html#services" class="block py-2 text-light hover:text-primary transition-colors">Services</a></li>
+                    <li><a href="index.html#contact" class="block py-2 text-light hover:text-primary transition-colors">Contact</a></li>
+                    <li><a href="index.html#contact" class="block py-2 text-primary font-medium">Hire Me</a></li>
+                </ul>
+            </div>
+        </div>
+    </header>
+
+        <!-- Project Header -->
+    <section class="pt-32 pb-20 relative">
+        <div class="container mx-auto px-4 relative z-10">
+            <div class="flex flex-wrap items-center">
+                <div class="w-full lg:w-2/3" data-aos="fade-right">
+                    <a href="projects.html" class="inline-flex items-center text-primary mb-6 hover:underline">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                        </svg>
+                        Back to Projects
+                    </a>
+                    <h1 class="text-4xl md:text-5xl font-bold mb-4">{{ project.name }}</h1>
+                    <div class="flex flex-wrap gap-2 mb-6">
+                        {% for technology in project.technology.all %}
+                        <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">{{ technology }}</span>
+                        {% endfor %}
+                    </div>
+                    <p class="text-gray-300 text-lg mb-8 max-w-3xl">
+                        {{ project.description }}
+                    </p>
+                    <div class="flex flex-wrap gap-4">
+                        <a href="{% if project.live_link == 'none' %}   # {% else %}{{ project.live_link }}{% endif %}" class="gradient-border bg-darker px-6 py-3 rounded-md text-light font-medium inline-flex items-center">
+                            <span>Live Demo</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                            </svg>
+                        </a>
+                        <a href="{% if project.github_link == 'none' %}   # {% else %}{{ project.github_link }}{% endif %}" class="border border-primary text-primary hover:bg-primary/10 px-6 py-3 rounded-md font-medium inline-flex items-center transition-colors">
+                            <span>Source Code</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+                <div class="w-full lg:w-1/3 mt-10 lg:mt-0" data-aos="fade-left">
+                    <div class="relative">
+                        <div class="w-full h-64 md:h-80 rounded-lg bg-gradient-to-r from-primary to-secondary absolute blur-xl opacity-20"></div>
+                        <div class="w-full h-64 md:h-80 rounded-lg bg-darker border border-primary/30 relative z-10 overflow-hidden">
+                            <img src="{{ project.image.url }}" alt="{{ project.name }}" class="w-full h-full object-cover">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="custom-shape-divider-bottom-1">
+            <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+                <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z" class="shape-fill"></path>
+            </svg>
+        </div>
+    </section>
+
+        <!-- Project Gallery -->
+    <section class="py-16 bg-gray-900">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold mb-12 text-center" data-aos="fade-up">Project Gallery</h2>
+            
+            <div class="swiper project-gallery mb-12" data-aos="fade-up">
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide">
+                        <img src="https://via.placeholder.com/1200x800" alt="E-commerce Homepage" class="rounded-lg">
+                    </div>
+                    <div class="swiper-slide">
+                        <img src="https://via.placeholder.com/1200x800" alt="Product Listing" class="rounded-lg">
+                    </div>
+                    <div class="swiper-slide">
+                        <img src="https://via.placeholder.com/1200x800" alt="Product Detail" class="rounded-lg">
+                    </div>
+                    <div class="swiper-slide">
+                        <img src="https://via.placeholder.com/1200x800" alt="Shopping Cart" class="rounded-lg">
+                    </div>
+                    <div class="swiper-slide">
+                        <img src="https://via.placeholder.com/1200x800" alt="Checkout Process" class="rounded-lg">
+                    </div>
+                </div>
+                <div class="swiper-pagination"></div>
+                <div class="swiper-button-next text-primary"></div>
+                <div class="swiper-button-prev text-primary"></div>
+            </div>
+            
+            <div class="grid md:grid-cols-4 gap-4" data-aos="fade-up" data-aos-delay="200">
+                <div class="bg-dark p-6 rounded-lg text-center">
+                    <div class="text-3xl font-bold text-primary mb-2">15+</div>
+                    <div class="text-gray-400">Pages</div>
+                </div>
+                <div class="bg-dark p-6 rounded-lg text-center">
+                    <div class="text-3xl font-bold text-primary mb-2">30+</div>
+                    <div class="text-gray-400">Components</div>
+                </div>
+                <div class="bg-dark p-6 rounded-lg text-center">
+                    <div class="text-3xl font-bold text-primary mb-2">100%</div>
+                    <div class="text-gray-400">Responsive</div>
+                </div>
+                <div class="bg-dark p-6 rounded-lg text-center">
+                    <div class="text-3xl font-bold text-primary mb-2">4</div>
+                    <div class="text-gray-400">Weeks</div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+{% endblock %}

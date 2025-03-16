@@ -1,12 +1,13 @@
 from os import name
 from django.db import models
+from ckeditor.fields import RichTextField
 
 # Create your models here.
 
 CHOICES = (
     ('front-end', 'Front-End'),
     ('back-end', 'Back-End'),
-)
+    )
 
 class PersonalInfo(models.Model):
     name = models.CharField(max_length=200)
@@ -51,3 +52,48 @@ class Project(models.Model):
 
     def __str__(self):
         return self.name
+    
+class Criteria(models.Model):
+    criteria = models.CharField(max_length=200)
+    details  = models.CharField(max_length=200)
+
+    def __str__(self):
+        return self.criteria
+
+class ProjectDetail(models.Model):
+    project = models.ForeignKey(Project, on_delete=models.CASCADE)
+    criteria = models.ManyToManyField(Criteria , related_name='project_details')
+    detail = models.CharField(max_length=200)
+    project_overview = RichTextField()
+    key_features = RichTextField()
+    PojTechnology = models.ManyToManyField(Technology, related_name='project_technologies')
+    diagram_file = models.FileField(upload_to='diagram/')
+    def __str__(self):
+        return self.detail
+
+class DevelopmentStage(models.Model):
+    project = models.ForeignKey(ProjectDetail, on_delete=models.CASCADE, related_name='stages')  
+    title = models.CharField(max_length=255)  
+    week = models.PositiveIntegerField()  
+    description = models.TextField() 
+
+    def __str__(self):
+        return f"{self.project.name} - Week {self.week}: {self.title}"
+
+class Challenges(models.Model):
+    project = models.ForeignKey(ProjectDetail, on_delete=models.CASCADE, related_name='challenges')
+    title = models.CharField(max_length=255)
+    description = models.TextField()
+
+    def __str__(self):
+        return f"{self.project.project.name} - {self.title}"
+
+
+class ProjectTechnology(models.Model):
+    project = models.ForeignKey(Project, on_delete=models.CASCADE)
+    technology = models.ForeignKey(Technology, on_delete=models.CASCADE)
+    usage_description = models.TextField()  
+    class Meta:
+        unique_together = ("project", "technology")
+    def __str__(self):
+        return f"{self.technology.name} in {self.project.title}"

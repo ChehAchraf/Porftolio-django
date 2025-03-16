@@ -9,3 +9,8 @@ def home(request):
     technology = Technology.objects.all()
     project = Project.objects.all()
     return render(request, 'home.html' , {'ashraf':personal_info,'front_end_technologies':front_end_technologies,'back_end_technologies':back_end_technologies,'technology':technology,'project':project})
+
+
+def single_project(request,id):
+    project = Project.objects.get(id=id)
+    return render(request, 'single-project.html', {'project': project})
