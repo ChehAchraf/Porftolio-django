@@ -68,8 +68,9 @@ class ProjectDetail(models.Model):
     key_features = RichTextField()
     PojTechnology = models.ManyToManyField(Technology, related_name='project_technologies')
     diagram_file = models.FileField(upload_to='diagram/')
+    what_ilearned = models.TextField()
     def __str__(self):
-        return self.detail
+        return f"Details of {self.project.name}"
 
 class DevelopmentStage(models.Model):
     project = models.ForeignKey(ProjectDetail, on_delete=models.CASCADE, related_name='stages')  
@@ -78,7 +79,7 @@ class DevelopmentStage(models.Model):
     description = models.TextField() 
 
     def __str__(self):
-        return f"{self.project.name} - Week {self.week}: {self.title}"
+        return f"{self.project.detail} - Week {self.week}: {self.title}"
 
 class Challenges(models.Model):
     project = models.ForeignKey(ProjectDetail, on_delete=models.CASCADE, related_name='challenges')

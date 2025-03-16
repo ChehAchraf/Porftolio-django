@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .models import PersonalInfo, TechnichalExpertise, Technology, Project
+from .models import PersonalInfo, TechnichalExpertise, Technology, Project , ProjectDetail , DevelopmentStage , Challenges
 # Create your views here.
 
 def home(request):
@@ -13,4 +13,8 @@ def home(request):
 
 def single_project(request,id):
     project = Project.objects.get(id=id)
-    return render(request, 'single-project.html', {'project': project})
+    project_detail = ProjectDetail.objects.get(project=project)
+    criteria_list = project_detail.criteria.all()
+    DevStage = project_detail.stages.all()
+    chanllenges = project_detail.challenges.all()
+    return render(request, 'single-project.html', {'project': project,"pd" : project_detail,'criteria_list': criteria_list , "devstage" : DevStage , "ch" : chanllenges})
