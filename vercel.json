@@ -1,8 +1,7 @@
 {
     "version": 2,
-    "builds": [],
-    "installCommand": "pip install -r requirements.txt",
-    "buildCommand": "python manage.py collectstatic --noinput",
+    "installCommand": "python3 -m pip install --upgrade pip && python3 -m pip install -r requirements.txt",
+    "buildCommand": "python3 manage.py collectstatic --noinput",
     "routes": [
         {
             "src": "/(.*)",
