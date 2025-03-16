@@ -1,13 +1,16 @@
 {
-    "builds": [{
-        "src": "portfolio/wsgi.py",
-        "use": "@vercel/python",
-        "config": { "maxLambdaSize": "15mb", "runtime": "python3.9" }
-    }],
+    "builds": [
+        {
+            "src": "portfolio/wsgi.py",
+            "use": "@vercel/python",
+            "config": { "maxLambdaSize": "15mb", "runtime": "python3.9" }
+        }
+    ],
     "routes": [
         {
             "src": "/(.*)",
             "dest": "portfolio/wsgi.py"
         }
-    ]
+    ],
+    "installCommand": "pip install -r requirements.txt"
 }
