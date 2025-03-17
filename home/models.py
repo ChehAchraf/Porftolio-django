@@ -97,4 +97,4 @@ class ProjectTechnology(models.Model):
     class Meta:
         unique_together = ("project", "technology")
     def __str__(self):
-        return f"{self.technology.name} in {self.project.title}"
+        return f"{self.technology.name} in {self.project.name}"
