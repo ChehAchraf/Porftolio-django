@@ -227,7 +227,15 @@
                     <!-- Search -->
                     <div class="md:w-1/3">
                         <div class="relative">
-                            <input type="text" id="search-input" placeholder="Search projects..." class="w-full px-4 py-3 bg-darker border border-gray-700 rounded-lg focus:outline-none focus:border-primary search-input text-light">
+                            <input type="text" 
+                                id="search-input" 
+                                name="search"
+                                placeholder="Search projects..." 
+                                class="w-full px-4 py-3 bg-darker border border-gray-700 rounded-lg focus:outline-none focus:border-primary search-input text-light"
+                                hx-get="{% url 'filter_projects' %}"
+                                hx-trigger="keyup changed delay:500ms"
+                                hx-target="#projects-container"
+                                hx-include=".filter-checkbox:checked">
                             <button class="absolute right-3 top-3 text-gray-400">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -246,17 +254,41 @@
                                 </svg>
                             </button>
                             <div class="dropdown-menu mt-2 w-full bg-darker border border-gray-700 rounded-lg shadow-xl py-2">
-                                <a href="#" class="block px-4 py-2 hover:bg-primary/10 hover:text-primary transition-colors sort-option" data-sort="newest">Newest</a>
-                                <a href="#" class="block px-4 py-2 hover:bg-primary/10 hover:text-primary transition-colors sort-option" data-sort="oldest">Oldest</a>
-                                <a href="#" class="block px-4 py-2 hover:bg-primary/10 hover:text-primary transition-colors sort-option" data-sort="name-asc">Name (A-Z)</a>
-                                <a href="#" class="block px-4 py-2 hover:bg-primary/10 hover:text-primary transition-colors sort-option" data-sort="name-desc">Name (Z-A)</a>
+                                <a href="#" 
+                                    class="block px-4 py-2 hover:bg-primary/10 hover:text-primary transition-colors sort-option" 
+                                    hx-get="{% url 'filter_projects' %}"
+                                    hx-target="#projects-container"
+                                    hx-include=".filter-checkbox:checked, #search-input"
+                                    hx-vals='{"sort": "newest"}'
+                                    onclick="updateSortLabel(this, 'Newest')">Newest</a>
+                                <a href="#" 
+                                    class="block px-4 py-2 hover:bg-primary/10 hover:text-primary transition-colors sort-option"
+                                    hx-get="{% url 'filter_projects' %}"
+                                    hx-target="#projects-container"
+                                    hx-include=".filter-checkbox:checked, #search-input"
+                                    hx-vals='{"sort": "oldest"}'
+                                    onclick="updateSortLabel(this, 'Oldest')">Oldest</a>
+                                <a href="#" 
+                                    class="block px-4 py-2 hover:bg-primary/10 hover:text-primary transition-colors sort-option"
+                                    hx-get="{% url 'filter_projects' %}"
+                                    hx-target="#projects-container"
+                                    hx-include=".filter-checkbox:checked, #search-input"
+                                    hx-vals='{"sort": "name-asc"}'
+                                    onclick="updateSortLabel(this, 'Name (A-Z)')">Name (A-Z)</a>
+                                <a href="#" 
+                                    class="block px-4 py-2 hover:bg-primary/10 hover:text-primary transition-colors sort-option"
+                                    hx-get="{% url 'filter_projects' %}"
+                                    hx-target="#projects-container"
+                                    hx-include=".filter-checkbox:checked, #search-input"
+                                    hx-vals='{"sort": "name-desc"}'
+                                    onclick="updateSortLabel(this, 'Name (Z-A)')">Name (Z-A)</a>
                             </div>
                         </div>
                     </div>
                     
-                    <!-- View Toggle -->
+                    <!-- View Toggle and Advanced Filters Button -->
                     <div class="md:w-1/3">
-                        <div class="flex justify-end">
+                        <div class="flex justify-end gap-4">
                             <div class="inline-flex rounded-lg border border-gray-700 overflow-hidden">
                                 <button class="px-4 py-3 bg-darker text-light hover:bg-primary/10 transition-colors view-toggle active" data-view="grid">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -269,15 +301,26 @@
                                     </svg>
                                 </button>
                             </div>
+                            <button id="toggle-filters" class="px-4 py-3 bg-darker text-light hover:bg-primary/10 transition-colors rounded-lg border border-gray-700 flex items-center gap-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+                                </svg>
+                                <span>Advanced Filters</span>
+                            </button>
                         </div>
                     </div>
                 </div>
                 
-                <!-- Advanced Filters -->
-                <div class="mt-6 pt-6 border-t border-gray-700">
+                <!-- Advanced Filters (Hidden by default) -->
+                <div id="advanced-filters" class="hidden mt-6 pt-6 border-t border-gray-700">
                     <div class="flex justify-between items-center mb-4">
                         <h3 class="font-semibold">Filters</h3>
-                        <button id="clear-filters" class="text-sm text-primary hover:underline">Clear all filters</button>
+                        <button 
+                            class="text-sm text-primary hover:underline"
+                            hx-get="{% url 'filter_projects' %}"
+                            hx-target="#projects-container"
+                            onclick="clearAllFilters()"
+                        >Clear all filters</button>
                     </div>
                     
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -286,24 +329,53 @@
                             <h4 class="text-sm font-medium mb-3">Categories</h4>
                             <div class="space-y-2">
                                 <label class="flex items-center">
-                                    <input type="checkbox" class="checkbox-primary mr-2 h-4 w-4 filter-checkbox" data-filter="category" data-value="web">
+                                    <input type="checkbox" 
+                                        class="checkbox-primary mr-2 h-4 w-4 filter-checkbox" 
+                                        value="web"
+                                        hx-get="{% url 'filter_projects' %}"
+                                        hx-trigger="change"
+                                        hx-target="#projects-container"
+                                        hx-include=".filter-checkbox:checked"
+                                        name="categories">
                                     <span>Web Development</span>
                                 </label>
                                 <label class="flex items-center">
-                                    <input type="checkbox" class="checkbox-primary mr-2 h-4 w-4 filter-checkbox" data-filter="category" data-value="mobile">
+                                    <input type="checkbox" 
+                                        class="checkbox-primary mr-2 h-4 w-4 filter-checkbox" 
+                                        value="mobile"
+                                        hx-get="{% url 'filter_projects' %}"
+                                        hx-trigger="change"
+                                        hx-target="#projects-container"
+                                        hx-include=".filter-checkbox:checked"
+                                        name="categories">
                                     <span>Mobile Apps</span>
                                 </label>
                                 <label class="flex items-center">
-                                    <input type="checkbox" class="checkbox-primary mr-2 h-4 w-4 filter-checkbox" data-filter="category" data-value="ui">
+                                    <input type="checkbox" 
+                                        class="checkbox-primary mr-2 h-4 w-4 filter-checkbox" 
+                                        value="ui"
+                                        hx-get="{% url 'filter_projects' %}"
+                                        hx-trigger="change"
+                                        hx-target="#projects-container"
+                                        hx-include=".filter-checkbox:checked"
+                                        name="categories">
                                     <span>UI/UX Design</span>
                                 </label>
                                 <label class="flex items-center">
-                                    <input type="checkbox" class="checkbox-primary mr-2 h-4 w-4 filter-checkbox" data-filter="category" data-value="backend">
+                                    <input type="checkbox" 
+                                        class="checkbox-primary mr-2 h-4 w-4 filter-checkbox" 
+                                        value="backend"
+                                        hx-get="{% url 'filter_projects' %}"
+                                        hx-trigger="change"
+                                        hx-target="#projects-container"
+                                        hx-include=".filter-checkbox:checked"
+                                        name="categories">
                                     <span>Backend</span>
                                 </label>
                             </div>
                         </div>
-                        <!-- Technology filter form with improved handling -->
+                        
+                        <!-- Technologies -->
                         <div>
                             <h4 class="text-sm font-medium mb-3">Technologies</h4>
                             <div class="space-y-2">
@@ -328,19 +400,47 @@
                             <h4 class="text-sm font-medium mb-3">Year</h4>
                             <div class="space-y-2">
                                 <label class="flex items-center">
-                                    <input type="checkbox" class="checkbox-primary mr-2 h-4 w-4 filter-checkbox" data-filter="year" data-value="2023">
+                                    <input type="checkbox" 
+                                        class="checkbox-primary mr-2 h-4 w-4 filter-checkbox" 
+                                        value="2023"
+                                        hx-get="{% url 'filter_projects' %}"
+                                        hx-trigger="change"
+                                        hx-target="#projects-container"
+                                        hx-include=".filter-checkbox:checked"
+                                        name="years">
                                     <span>2023</span>
                                 </label>
                                 <label class="flex items-center">
-                                    <input type="checkbox" class="checkbox-primary mr-2 h-4 w-4 filter-checkbox" data-filter="year" data-value="2022">
+                                    <input type="checkbox" 
+                                        class="checkbox-primary mr-2 h-4 w-4 filter-checkbox" 
+                                        value="2022"
+                                        hx-get="{% url 'filter_projects' %}"
+                                        hx-trigger="change"
+                                        hx-target="#projects-container"
+                                        hx-include=".filter-checkbox:checked"
+                                        name="years">
                                     <span>2022</span>
                                 </label>
                                 <label class="flex items-center">
-                                    <input type="checkbox" class="checkbox-primary mr-2 h-4 w-4 filter-checkbox" data-filter="year" data-value="2021">
+                                    <input type="checkbox" 
+                                        class="checkbox-primary mr-2 h-4 w-4 filter-checkbox" 
+                                        value="2021"
+                                        hx-get="{% url 'filter_projects' %}"
+                                        hx-trigger="change"
+                                        hx-target="#projects-container"
+                                        hx-include=".filter-checkbox:checked"
+                                        name="years">
                                     <span>2021</span>
                                 </label>
                                 <label class="flex items-center">
-                                    <input type="checkbox" class="checkbox-primary mr-2 h-4 w-4 filter-checkbox" data-filter="year" data-value="2020">
+                                    <input type="checkbox" 
+                                        class="checkbox-primary mr-2 h-4 w-4 filter-checkbox" 
+                                        value="2020"
+                                        hx-get="{% url 'filter_projects' %}"
+                                        hx-trigger="change"
+                                        hx-target="#projects-container"
+                                        hx-include=".filter-checkbox:checked"
+                                        name="years">
                                     <span>2020 & Earlier</span>
                                 </label>
                             </div>
@@ -357,19 +457,18 @@
             <!-- Results Summary -->
             <div class="mb-6 flex justify-between items-center" data-aos="fade-up">
                 <div class="text-gray-400">
-                    Showing <span id="showing-count">12</span> of <span id="total-count">24</span> projects
+                    Showing <span id="showing-count">{{ projects.start_index }}-{{ projects.end_index }}</span> of <span id="total-count">{{ total_projects }}</span> projects
                 </div>
                 <div class="text-gray-400">
-                    Page <span id="current-page">1</span> of <span id="total-pages">2</span>
+                    Page <span id="current-page">{{ current_page }}</span> of <span id="total-pages">{{ total_pages }}</span>
                 </div>
             </div>
-            <!-- Grid View (Default) -->
-            <!-- main template with grid view -->
-                <div id="projects-container" class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                        {% include "partials/project_list.html" with projects=projects %}
-                </div>
 
-            
+            <!-- Grid View (Default) -->
+            <div id="projects-container" class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {% include "partials/project_list.html" with projects=projects %}
+            </div>
+
             <!-- List View (Hidden by default) -->
             <div id="list-view" class="hidden space-y-6 mb-12">
                 <!-- List items will be dynamically generated with JavaScript -->
@@ -378,19 +477,37 @@
             <!-- Pagination -->
             <div class="flex justify-center mt-12" data-aos="fade-up">
                 <div class="inline-flex rounded-md shadow-sm">
-                    <a href="#" class="px-4 py-2 text-sm font-medium text-gray-400 bg-darker border border-gray-700 rounded-l-lg hover:bg-primary/10 hover:text-primary" id="prev-page">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-                        </svg>
-                    </a>
-                    <a href="#" class="px-4 py-2 text-sm font-medium text-white bg-primary border border-primary pagination-link pagination-active" data-page="1">1</a>
-                    <a href="#" class="px-4 py-2 text-sm font-medium text-gray-400 bg-darker border border-gray-700 hover:bg-primary/10 hover:text-primary pagination-link" data-page="2">2</a>
-                    <a href="#" class="px-4 py-2 text-sm font-medium text-gray-400 bg-darker border border-gray-700 hover:bg-primary/10 hover:text-primary pagination-link" data-page="3">3</a>
-                    <a href="#" class="px-4 py-2 text-sm font-medium text-gray-400 bg-darker border border-gray-700 rounded-r-lg hover:bg-primary/10 hover:text-primary" id="next-page">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                        </svg>
-                    </a>
+                    {% if has_previous %}
+                        <a href="?page={{ previous_page }}" 
+                           class="px-4 py-2 text-sm font-medium text-gray-400 bg-darker border border-gray-700 rounded-l-lg hover:bg-primary/10 hover:text-primary">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                            </svg>
+                        </a>
+                    {% endif %}
+
+                    {% for num in projects.paginator.page_range %}
+                        {% if num == current_page %}
+                            <a href="?page={{ num }}" 
+                               class="px-4 py-2 text-sm font-medium text-white bg-primary border border-primary pagination-link pagination-active">
+                                {{ num }}
+                            </a>
+                        {% elif num > current_page|add:'-3' and num < current_page|add:'3' %}
+                            <a href="?page={{ num }}" 
+                               class="px-4 py-2 text-sm font-medium text-gray-400 bg-darker border border-gray-700 hover:bg-primary/10 hover:text-primary pagination-link">
+                                {{ num }}
+                            </a>
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if has_next %}
+                        <a href="?page={{ next_page }}" 
+                           class="px-4 py-2 text-sm font-medium text-gray-400 bg-darker border border-gray-700 rounded-r-lg hover:bg-primary/10 hover:text-primary">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                            </svg>
+                        </a>
+                    {% endif %}
                 </div>
             </div>
         </div>
@@ -540,6 +657,78 @@
         
         // Current Year
         document.getElementById('current-year').textContent = new Date().getFullYear();
+    </script>
+    <script>
+        function clearAllFilters() {
+            // Clear search input
+            document.getElementById('search-input').value = '';
+            
+            // Clear all checkboxes
+            document.querySelectorAll('.filter-checkbox').forEach(checkbox => {
+                checkbox.checked = false;
+            });
+            
+            // Reset sort label
+            document.getElementById('sort-label').textContent = 'Sort by: Newest';
+        }
+    </script>
+    <script>
+    function updateSortLabel(element, label) {
+        document.getElementById('sort-label').textContent = 'Sort by: ' + label;
+    }
+    </script>
+    <script>
+        // Toggle Advanced Filters
+        const toggleFiltersBtn = document.getElementById('toggle-filters');
+        const advancedFilters = document.getElementById('advanced-filters');
+        
+        toggleFiltersBtn.addEventListener('click', function() {
+            advancedFilters.classList.toggle('hidden');
+            // Update button text and icon
+            const buttonText = toggleFiltersBtn.querySelector('span');
+            const buttonIcon = toggleFiltersBtn.querySelector('svg');
+            
+            if (advancedFilters.classList.contains('hidden')) {
+                buttonText.textContent = 'Advanced Filters';
+                buttonIcon.classList.remove('rotate-180');
+            } else {
+                buttonText.textContent = 'Hide Filters';
+                buttonIcon.classList.add('rotate-180');
+            }
+        });
+    </script>
+    <script>
+        // Update pagination links to maintain filters
+        document.addEventListener('DOMContentLoaded', function() {
+            const paginationLinks = document.querySelectorAll('.pagination-link');
+            paginationLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const page = this.getAttribute('href').split('=')[1];
+                    const currentUrl = new URL(window.location.href);
+                    currentUrl.searchParams.set('page', page);
+                    
+                    // Include current filters in the URL
+                    const searchInput = document.getElementById('search-input');
+                    const filterCheckboxes = document.querySelectorAll('.filter-checkbox:checked');
+                    
+                    if (searchInput.value) {
+                        currentUrl.searchParams.set('search', searchInput.value);
+                    }
+                    
+                    filterCheckboxes.forEach(checkbox => {
+                        const name = checkbox.getAttribute('name');
+                        if (!currentUrl.searchParams.has(name)) {
+                            currentUrl.searchParams.set(name, checkbox.value);
+                        } else {
+                            currentUrl.searchParams.append(name, checkbox.value);
+                        }
+                    });
+                    
+                    window.location.href = currentUrl.toString();
+                });
+            });
+        });
     </script>
 </body>
 </html>

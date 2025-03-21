@@ -1,6 +1,10 @@
 <!-- partials/project_list.html -->
 {% for project in projects %}
     <div id="project-{{ project.id }}" class="bg-dark rounded-lg overflow-hidden group card-hover project-item" 
+        data-category="{{ project.category }}"
+        data-tech="{% for tech in project.technology.all %}{{ tech.name|lower }}{% if not forloop.last %},{% endif %}{% endfor %}"
+        data-year="{{ project.year }}"
+        data-name="{{ project.name|lower }}"
         data-aos="fade-up" data-aos-delay="100">
         <div class="relative overflow-hidden h-64">
             <img src="{{ project.image.url }}" alt="{{ project.name }}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
@@ -20,12 +24,12 @@
                 {{ project.description|slice:":250" }}...
             </p>
             <div class="flex flex-wrap gap-2 mb-4">
-                {% for tech in project.technologies.all %}
+                {% for tech in project.technology.all %}
                     <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-xs">{{ tech.name }}</span>
                 {% endfor %}
             </div>
             <div class="flex justify-between items-center">
-                <span class="text-gray-500 text-sm">2023</span>
+                <span class="text-gray-500 text-sm">{{ project.year }}</span>
                 <a href="{% url 'single-project' project.id %}" class="text-primary hover:underline text-sm">View Details →</a>
             </div>
         </div>

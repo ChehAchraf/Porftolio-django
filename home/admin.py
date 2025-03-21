@@ -1,5 +1,9 @@
 from django.contrib import admin
-from .models import PersonalInfo, TechnichalExpertise, Technology, Project, ProjectTechnology, ProjectDetail, Criteria,DevelopmentStage , Challenges
+from .models import (
+    PersonalInfo, TechnichalExpertise, Technology, Project, 
+    ProjectTechnology, ProjectDetail, ProjectMetric, 
+    DevelopmentStage, Challenges, ProjectGallery
+)
 
 # Register your models here.
 admin.site.register(PersonalInfo)
@@ -7,7 +11,10 @@ admin.site.register(TechnichalExpertise)
 admin.site.register(Technology)
 admin.site.register(Project)
 admin.site.register(ProjectTechnology)
-admin.site.register(Criteria)
+
+class ProjectMetricInline(admin.TabularInline):
+    model = ProjectMetric
+    extra = 1
 
 class DevelopmentStageInline(admin.TabularInline):  
     model = DevelopmentStage
@@ -18,9 +25,12 @@ class ChallengesInline(admin.TabularInline):
     extra = 1  
 
 @admin.register(ProjectDetail)
-class ProjectAdmin(admin.ModelAdmin):
-    list_display = ('project', 'detail')
-    inlines = [DevelopmentStageInline, ChallengesInline] 
+class ProjectDetailAdmin(admin.ModelAdmin):
+    list_display = ('project', 'project_overview')
+    inlines = [ProjectMetricInline, DevelopmentStageInline, ChallengesInline]
+    
+    def get_queryset(self, request):
+        return super().get_queryset(request).select_related('project')
 
 @admin.register(DevelopmentStage)
 class DevelopmentStageAdmin(admin.ModelAdmin):
@@ -31,3 +41,14 @@ class DevelopmentStageAdmin(admin.ModelAdmin):
 class ChallengesAdmin(admin.ModelAdmin):
     list_display = ('project', 'title')
     ordering = ('project',)  
+
+@admin.register(ProjectGallery)
+class ProjectGalleryAdmin(admin.ModelAdmin):
+    list_display = ('project', 'title', 'order', 'created_at')
+    list_filter = ('project', 'created_at')
+    search_fields = ('title', 'description', 'project__name')
+    ordering = ('project', 'order', 'created_at')
+    list_per_page = 20
+
+    def get_queryset(self, request):
+        return super().get_queryset(request).select_related('project')

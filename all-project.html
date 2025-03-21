@@ -982,6 +982,162 @@
         
         // Current Year
         document.getElementById('current-year').textContent = new Date().getFullYear();
+
+        // Project Filtering and Sorting
+        const projectItems = document.querySelectorAll('.project-item');
+        const searchInput = document.getElementById('search-input');
+        const filterCheckboxes = document.querySelectorAll('.filter-checkbox');
+        const sortOptions = document.querySelectorAll('.sort-option');
+        const viewToggles = document.querySelectorAll('.view-toggle');
+        const gridView = document.getElementById('grid-view');
+        const listView = document.getElementById('list-view');
+        const activeFilters = document.getElementById('active-filters');
+
+        let currentFilters = {
+            category: [],
+            tech: [],
+            year: []
+        };
+
+        // Search functionality
+        searchInput.addEventListener('input', filterProjects);
+
+        // Filter checkboxes
+        filterCheckboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+                const filterType = this.dataset.filter;
+                const value = this.dataset.value;
+
+                if (this.checked) {
+                    currentFilters[filterType].push(value);
+                } else {
+                    currentFilters[filterType] = currentFilters[filterType].filter(item => item !== value);
+                }
+
+                updateActiveFilters();
+                filterProjects();
+            });
+        });
+
+        // Sort functionality
+        sortOptions.forEach(option => {
+            option.addEventListener('click', function(e) {
+                e.preventDefault();
+                const sortBy = this.dataset.sort;
+                document.getElementById('sort-label').textContent = `Sort by: ${this.textContent}`;
+                sortProjects(sortBy);
+            });
+        });
+
+        // View toggle functionality
+        viewToggles.forEach(toggle => {
+            toggle.addEventListener('click', function() {
+                viewToggles.forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+                
+                if (this.dataset.view === 'grid') {
+                    gridView.classList.remove('hidden');
+                    listView.classList.add('hidden');
+                } else {
+                    gridView.classList.add('hidden');
+                    listView.classList.remove('hidden');
+                }
+            });
+        });
+
+        // Clear filters
+        document.getElementById('clear-filters').addEventListener('click', function() {
+            filterCheckboxes.forEach(checkbox => checkbox.checked = false);
+            currentFilters = {
+                category: [],
+                tech: [],
+                year: []
+            };
+            updateActiveFilters();
+            filterProjects();
+        });
+
+        function updateActiveFilters() {
+            activeFilters.innerHTML = '';
+            
+            Object.entries(currentFilters).forEach(([type, values]) => {
+                values.forEach(value => {
+                    const filter = document.createElement('div');
+                    filter.className = 'bg-primary/10 text-primary px-3 py-1 rounded-full text-sm inline-flex items-center mr-2 mb-2';
+                    filter.innerHTML = `
+                        ${value}
+                        <button class="ml-2 text-primary hover:text-secondary" onclick="removeFilter('${type}', '${value}')">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </button>
+                    `;
+                    activeFilters.appendChild(filter);
+                });
+            });
+        }
+
+        function removeFilter(type, value) {
+            currentFilters[type] = currentFilters[type].filter(item => item !== value);
+            const checkbox = document.querySelector(`.filter-checkbox[data-filter="${type}"][data-value="${value}"]`);
+            if (checkbox) checkbox.checked = false;
+            updateActiveFilters();
+            filterProjects();
+        }
+
+        function filterProjects() {
+            const searchTerm = searchInput.value.toLowerCase();
+            
+            projectItems.forEach(item => {
+                const name = item.dataset.name;
+                const category = item.dataset.category;
+                const tech = item.dataset.tech.split(',');
+                const year = item.dataset.year;
+
+                const matchesSearch = name.includes(searchTerm);
+                const matchesCategory = currentFilters.category.length === 0 || currentFilters.category.includes(category);
+                const matchesTech = currentFilters.tech.length === 0 || currentFilters.tech.some(t => tech.includes(t));
+                const matchesYear = currentFilters.year.length === 0 || currentFilters.year.includes(year);
+
+                if (matchesSearch && matchesCategory && matchesTech && matchesYear) {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+
+            updateProjectCount();
+        }
+
+        function sortProjects(sortBy) {
+            const projectsArray = Array.from(projectItems);
+            
+            projectsArray.sort((a, b) => {
+                switch(sortBy) {
+                    case 'newest':
+                        return parseInt(b.dataset.year) - parseInt(a.dataset.year);
+                    case 'oldest':
+                        return parseInt(a.dataset.year) - parseInt(b.dataset.year);
+                    case 'name-asc':
+                        return a.dataset.name.localeCompare(b.dataset.name);
+                    case 'name-desc':
+                        return b.dataset.name.localeCompare(a.dataset.name);
+                    default:
+                        return 0;
+                }
+            });
+
+            const container = gridView;
+            projectsArray.forEach(item => container.appendChild(item));
+        }
+
+        function updateProjectCount() {
+            const visibleProjects = document.querySelectorAll('.project-item[style="display: block"]').length;
+            const totalProjects = projectItems.length;
+            
+            document.getElementById('showing-count').textContent = visibleProjects;
+            document.getElementById('total-count').textContent = totalProjects;
+        }
     </script>
 </body>
 </html>

@@ -3,6 +3,68 @@
 {% block extrahead %}
 <!-- Add Swiper CSS -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+<!-- Add Swiper JS -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+<!-- Lightbox CSS -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/css/lightbox.min.css" rel="stylesheet">
+<!-- Lightbox JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/js/lightbox.min.js"></script>
+
+<style>
+    /* Rich Text Content Styling */
+    .rich-text-content {
+        @apply prose prose-invert max-w-none;
+    }
+    
+    .rich-text-content h1 {
+        @apply text-2xl font-bold mb-4 text-white;
+    }
+    
+    .rich-text-content h2 {
+        @apply text-xl font-bold mb-3 text-white;
+    }
+    
+    .rich-text-content h3 {
+        @apply text-lg font-bold mb-2 text-white;
+    }
+    
+    .rich-text-content p {
+        @apply text-gray-300 mb-4;
+    }
+    
+    .rich-text-content ul {
+        @apply list-disc list-inside mb-4 text-gray-300;
+    }
+    
+    .rich-text-content ol {
+        @apply list-decimal list-inside mb-4 text-gray-300;
+    }
+    
+    .rich-text-content li {
+        @apply mb-2;
+    }
+    
+    .rich-text-content a {
+        @apply text-primary hover:text-primary-light underline;
+    }
+    
+    .rich-text-content blockquote {
+        @apply border-l-4 border-primary pl-4 italic my-4 text-gray-300;
+    }
+    
+    .rich-text-content table {
+        @apply w-full border-collapse mb-4;
+    }
+    
+    .rich-text-content th,
+    .rich-text-content td {
+        @apply border border-gray-700 p-2 text-gray-300;
+    }
+    
+    .rich-text-content th {
+        @apply bg-darker;
+    }
+</style>
 {% endblock %}
 
 {% block content %}
@@ -115,36 +177,52 @@
         <div class="container mx-auto px-4">
             <h2 class="text-3xl font-bold mb-12 text-center" data-aos="fade-up">Project Gallery</h2>
             
-            <div class="swiper project-gallery mb-12" data-aos="fade-up">
-                <div class="swiper-wrapper">
-                    <div class="swiper-slide">
-                        <img src="https://via.placeholder.com/1200x800" alt="E-commerce Homepage" class="rounded-lg">
-                    </div>
-                    <div class="swiper-slide">
-                        <img src="https://via.placeholder.com/1200x800" alt="Product Listing" class="rounded-lg">
-                    </div>
-                    <div class="swiper-slide">
-                        <img src="https://via.placeholder.com/1200x800" alt="Product Detail" class="rounded-lg">
-                    </div>
-                    <div class="swiper-slide">
-                        <img src="https://via.placeholder.com/1200x800" alt="Shopping Cart" class="rounded-lg">
-                    </div>
-                    <div class="swiper-slide">
-                        <img src="https://via.placeholder.com/1200x800" alt="Checkout Process" class="rounded-lg">
+            {% if gallery_images %}
+                <div class="max-w-6xl mx-auto">
+                    <!-- Gallery Grid -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" data-aos="fade-up">
+                        {% for image in gallery_images %}
+                            <a href="{{ image.image.url }}" 
+                               data-lightbox="project-gallery" 
+                               data-title="{% if image.title %}{{ image.title }}{% endif %}{% if image.description %} - {{ image.description }}{% endif %}"
+                               class="block relative group">
+                                <div class="aspect-[4/3] rounded-lg overflow-hidden bg-darker">
+                                    <img src="{{ image.image.url }}" 
+                                         alt="{{ image.title }}" 
+                                         class="w-full h-full object-contain transition-transform duration-500 group-hover:scale-105">
+                                    
+                                    <!-- Overlay with Title -->
+                                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6">
+                                        {% if image.title %}
+                                            <h3 class="text-xl font-semibold mb-2 text-white transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
+                                                {{ image.title }}
+                                            </h3>
+                                        {% endif %}
+                                        {% if image.description %}
+                                            <p class="text-gray-300 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300 delay-100">
+                                                {{ image.description }}
+                                            </p>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </a>
+                        {% endfor %}
                     </div>
                 </div>
-                <div class="swiper-pagination"></div>
-                <div class="swiper-button-next text-primary"></div>
-                <div class="swiper-button-prev text-primary"></div>
-            </div>
+            {% else %}
+                <div class="text-center text-gray-400" data-aos="fade-up">
+                    <p>No gallery images available for this project.</p>
+                </div>
+            {% endif %}
             
-            <div class="grid md:grid-cols-4 gap-4" data-aos="fade-up" data-aos-delay="200">
-                {% for criteria in criteria_list %}
-        <div class="bg-dark p-6 rounded-lg text-center">
-            <div class="text-3xl font-bold text-primary mb-2">{{ criteria.criteria }}</div>
-            <div class="text-gray-400">{{ criteria.details }}</div>
-        </div>
-    {% endfor %}
+            <!-- Project Metrics -->
+            <div class="grid md:grid-cols-4 gap-4 mt-16 max-w-6xl mx-auto" data-aos="fade-up" data-aos-delay="200">
+                {% for metric in project_detail.metrics.all %}
+                    <div class="bg-dark p-6 rounded-lg text-center transform hover:-translate-y-1 transition-transform duration-300">
+                        <div class="text-3xl font-bold text-primary mb-2">{{ metric.metric_name }}</div>
+                        <div class="text-gray-400">{{ metric.metric_value }}</div>
+                    </div>
+                {% endfor %}
             </div>
         </div>
     </section>
@@ -155,15 +233,15 @@
             <div class="grid md:grid-cols-2 gap-12">
                 <div data-aos="fade-right">
                     <h2 class="text-3xl font-bold mb-6">Project Overview</h2>
-                    <p class="text-gray-300 mb-6">
-                        {{pd.project_overview|safe}}
-                    </p>
+                    <div class="rich-text-content">
+                        {{ project_detail.project_overview|safe }}
+                    </div>
                 </div>
                 
                 <div data-aos="fade-left">
                     <h2 class="text-3xl font-bold mb-6">Key Features</h2>
-                    <div class="space-y-4">
-                        {{pd.key_features|safe}}
+                    <div class="rich-text-content">
+                        {{ project_detail.key_features|safe }}
                     </div>
                 </div>
             </div>
@@ -238,3 +316,60 @@
     </section>
     
 {% endblock %}
+
+<script>
+    // Initialize Swiper when DOM is loaded
+    window.addEventListener('load', function() {
+        const swiper = new Swiper('.project-gallery', {
+            slidesPerView: 1,
+            spaceBetween: 20,
+            loop: true,
+            speed: 800,
+            grabCursor: true,
+            centeredSlides: true,
+            breakpoints: {
+                640: {
+                    slidesPerView: 1,
+                },
+                768: {
+                    slidesPerView: 2,
+                    spaceBetween: 30,
+                },
+                1024: {
+                    slidesPerView: 2,
+                    spaceBetween: 40,
+                }
+            },
+            autoplay: {
+                delay: 5000,
+                disableOnInteraction: false,
+            },
+            navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
+            },
+        });
+
+        // Thumbnail navigation
+        const thumbnails = document.querySelectorAll('.thumbnail-nav');
+        thumbnails.forEach(thumb => {
+            thumb.addEventListener('click', function() {
+                const index = parseInt(this.dataset.index);
+                swiper.slideTo(index + 1);
+            });
+        });
+
+        // Update thumbnail opacity based on active slide
+        swiper.on('slideChange', function() {
+            thumbnails.forEach(thumb => {
+                thumb.querySelector('img').classList.add('opacity-50');
+                thumb.querySelector('img').classList.remove('opacity-100');
+            });
+            const activeThumb = document.querySelector(`.thumbnail-nav[data-index="${swiper.realIndex}"]`);
+            if (activeThumb) {
+                activeThumb.querySelector('img').classList.remove('opacity-50');
+                activeThumb.querySelector('img').classList.add('opacity-100');
+            }
+        });
+    });
+</script>
