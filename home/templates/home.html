@@ -4,55 +4,7 @@
     <!-- Vanta.js Background -->
     <div id="vanta-bg"></div>
     
-    <!-- Preloader -->
-    <div id="preloader" class="fixed inset-0 bg-darker z-50 flex items-center justify-center">
-        <div class="w-16 h-16 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
-    </div>
-    
-    <!-- Header -->
-    {% comment %} <header class="fixed w-full z-40 transition-all duration-300" id="header">
-        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
-            <a href="index.html" class="text-2xl font-bold">
-                <span class="gradient-text">&lt;/&gt;</span> <span class="hidden sm:inline">{{ ashraf.name }}</span>
-            </a>
-            
-            <nav class="hidden md:flex items-center space-x-8">
-                <a href="#home" class="text-light hover:text-primary transition-colors relative nav-link">Home</a>
-                <a href="#about" class="text-light hover:text-primary transition-colors relative nav-link">About</a>
-                <a href="#skills" class="text-light hover:text-primary transition-colors relative nav-link">Skills</a>
-                <a href="#projects" class="text-light hover:text-primary transition-colors relative nav-link">Projects</a>
-                <a href="#services" class="text-light hover:text-primary transition-colors relative nav-link">Services</a>
-                <a href="#contact" class="text-light hover:text-primary transition-colors relative nav-link">Contact</a>
-            </nav>
-            
-            <button class="gradient-border bg-darker px-6 py-2 text-light rounded-md hidden md:block">
-                Hire Me
-            </button>
-            
-            <button class="md:hidden text-light" id="menu-toggle">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-                </svg>
-            </button>
-        </div>
-        
-        <!-- Mobile menu -->
-        <div class="md:hidden hidden bg-darker/90 backdrop-blur-md w-full absolute" id="mobile-menu">
-            <div class="container mx-auto px-4 py-4">
-                <ul class="flex flex-col space-y-4">
-                    <li><a href="#home" class="block py-2 text-light hover:text-primary transition-colors">Home</a></li>
-                    <li><a href="#about" class="block py-2 text-light hover:text-primary transition-colors">About</a></li>
-                    <li><a href="#skills" class="block py-2 text-light hover:text-primary transition-colors">Skills</a></li>
-                    <li><a href="#projects" class="block py-2 text-light hover:text-primary transition-colors">Projects</a></li>
-                    <li><a href="#services" class="block py-2 text-light hover:text-primary transition-colors">Services</a></li>
-                    <li><a href="#contact" class="block py-2 text-light hover:text-primary transition-colors">Contact</a></li>
-                    <li><a href="#" class="block py-2 text-primary font-medium">Hire Me</a></li>
-                </ul>
-            </div>
-        </div>
-    </header> {% endcomment %}
-
-        <!-- Hero Section -->
+    <!-- Hero Section -->
     <section id="home" class="min-h-screen flex items-center relative overflow-hidden">
         <div class="container mx-auto px-4 py-20 pt-32 relative z-10">
             <div class="flex flex-col md:flex-row items-center">
@@ -60,7 +12,7 @@
                     <div class="text-sm font-medium text-primary mb-4 tracking-wider">SOFTWARE ENGINEER</div>
                     <h1 class="text-4xl md:text-6xl font-bold mb-6">
                         Hi, I'm <span class="gradient-text">{{ ashraf.name }}</span>
-                        <div class="text-2xl md:text-3xl mt-4 typing-demo">{{ ashraf.title }}</div>
+                        <div class="text-2xl md:text-3xl mt-4 typing-demo"></div>
                     </h1>
                     <p class="text-gray-300 text-lg mb-8">
                         {{ ashraf.bio }}
@@ -102,7 +54,7 @@
                         <div class="absolute -bottom-4 -right-4 bg-darker p-4 rounded-lg border border-gray-700 z-20 shadow-xl">
                             <div class="flex items-center space-x-2">
                                 <div class="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
-                                <span class="text-sm font-medium">{{ ashraf.status }}</span>
+                                <span class="text-sm font-medium">Open to Work</span>
                             </div>
                         </div>
                         <div class="absolute -top-4 -left-4 bg-darker p-4 rounded-lg border border-gray-700 z-20 shadow-xl">
@@ -130,7 +82,7 @@
         </div>
     </section>
 
-        <!-- Tech Stack Section -->
+    <!-- Tech Stack Section -->
     <section class="py-20 bg-gray-900">
         <div class="container mx-auto px-4">
             <div class="text-center mb-16" data-aos="fade-up">
@@ -149,7 +101,7 @@
         </div>
     </section>
 
-        <!-- About Section -->
+    <!-- About Section -->
     <section id="about" class="py-20 bg-darker relative">
         <div class="container mx-auto px-4">
             <div class="text-center mb-16" data-aos="fade-up">
@@ -218,7 +170,7 @@
         </div>
     </section>
 
-        <!-- Skills Section -->
+    <!-- Skills Section -->
     <section id="skills" class="py-20 bg-dark">
         <div class="container mx-auto px-4">
             <div class="text-center mb-16" data-aos="fade-up">
@@ -297,7 +249,7 @@
         </div>
     </section>
 
-        <!-- Projects Section -->
+    <!-- Projects Section -->
     <section id="projects" class="py-20 bg-darker">
         <div class="container mx-auto px-4">
             <div class="text-center mb-16" data-aos="fade-up">
@@ -344,7 +296,7 @@
             </div>
             
             <div class="text-center mt-12" data-aos="fade-up">
-                <a href="#" class="gradient-border bg-darker px-8 py-3 rounded-md text-light font-medium inline-flex items-center">
+                <a href="{% url 'all_project' %}" class="gradient-border bg-darker px-8 py-3 rounded-md text-light font-medium inline-flex items-center">
                     <span>View All Projects</span>
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />

@@ -1,734 +1,283 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>All Projects - Full-Stack Developer Portfolio</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.net.min.js"></script>
-    <script src="https://unpkg.com/htmx.org@2.0.4/dist/htmx.js" integrity="sha384-oeUn82QNXPuVkGCkcrInrS1twIxKhkZiFfr2TdiuObZ3n3yIeMiqcRzkIcguaof1" crossorigin="anonymous"></script>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
-        
-        body {
-            font-family: 'Poppins', sans-serif;
-            scroll-behavior: smooth;
-        }
-        
-        .gradient-text {
-            background: linear-gradient(90deg, #8B5CF6, #EC4899);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        
-        .gradient-border {
-            position: relative;
-            border-radius: 0.5rem;
-        }
-        
-        .gradient-border::before {
-            content: "";
-            position: absolute;
-            top: -2px;
-            left: -2px;
-            right: -2px;
-            bottom: -2px;
-            background: linear-gradient(45deg, #8B5CF6, #EC4899, #3B82F6);
-            z-index: -1;
-            border-radius: 0.6rem;
-            animation: animatedgradient 3s ease alternate infinite;
-            background-size: 300% 300%;
-        }
-        
-        @keyframes animatedgradient {
-            0% {
-                background-position: 0% 50%;
-            }
-            50% {
-                background-position: 100% 50%;
-            }
-            100% {
-                background-position: 0% 50%;
-            }
-        }
-        
-        .card-hover {
-            transition: all 0.3s ease;
-        }
-        
-        .card-hover:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 20px 25px -5px rgba(139, 92, 246, 0.1), 0 10px 10px -5px rgba(139, 92, 246, 0.04);
-        }
-        
-        #vanta-bg {
-            width: 100%;
-            height: 50vh;
-            position: absolute;
-            top: 0;
-            left: 0;
-            z-index: -1;
-        }
-        
-        .custom-shape-divider-bottom-1 {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            overflow: hidden;
-            line-height: 0;
-        }
-        
-        .custom-shape-divider-bottom-1 svg {
-            position: relative;
-            display: block;
-            width: calc(100% + 1.3px);
-            height: 150px;
-        }
-        
-        .custom-shape-divider-bottom-1 .shape-fill {
-            fill: #111827;
-        }
-        
-        .filter-active {
-            background-color: rgba(139, 92, 246, 0.2);
-            color: #8B5CF6;
-            border-color: #8B5CF6;
-        }
-        
-        .pagination-active {
-            background-color: #8B5CF6;
-            color: white;
-            border-color: #8B5CF6;
-        }
-        
-        .project-item {
-            transition: all 0.5s ease;
-        }
-        
-        .checkbox-primary {
-            accent-color: #8B5CF6;
-        }
-        
-        .dropdown-menu {
-            display: none;
-            position: absolute;
-            z-index: 10;
-        }
-        
-        .dropdown:hover .dropdown-menu {
-            display: block;
-        }
-        
-        .search-input:focus {
-            box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.3);
-        }
-    </style>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        primary: '#8B5CF6',
-                        secondary: '#EC4899',
-                        dark: '#0F172A',
-                        darker: '#070B14',
-                        light: '#F3F4F6',
-                    },
-                    animation: {
-                        'spin-slow': 'spin 8s linear infinite',
-                    }
-                }
-            }
-        }
-    </script>
-</head>
-<body class="bg-dark text-light">
-    <!-- Vanta.js Background -->
-    <div id="vanta-bg"></div>
-    
-    <!-- Preloader -->
-    <div id="preloader" class="fixed inset-0 bg-darker z-50 flex items-center justify-center">
-        <div class="w-16 h-16 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
-    </div>
-    
-    <!-- Header -->
-    <header class="fixed w-full z-40 transition-all duration-300" id="header">
-        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
-            <a href="index.html" class="text-2xl font-bold">
-                <span class="gradient-text">&lt;/&gt;</span> <span class="hidden sm:inline">DevMaster</span>
-            </a>
-            
-            <nav class="hidden md:flex items-center space-x-8">
-                <a href="index.html#home" class="text-light hover:text-primary transition-colors relative nav-link">Home</a>
-                <a href="index.html#about" class="text-light hover:text-primary transition-colors relative nav-link">About</a>
-                <a href="index.html#skills" class="text-light hover:text-primary transition-colors relative nav-link">Skills</a>
-                <a href="projects.html" class="text-primary transition-colors relative nav-link">Projects</a>
-                <a href="index.html#services" class="text-light hover:text-primary transition-colors relative nav-link">Services</a>
-                <a href="index.html#contact" class="text-light hover:text-primary transition-colors relative nav-link">Contact</a>
-            </nav>
-            
-            <a href="index.html#contact" class="gradient-border bg-darker px-6 py-2 text-light rounded-md hidden md:block">
-                Hire Me
-            </a>
-            
-            <button class="md:hidden text-light" id="menu-toggle">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-                </svg>
-            </button>
-        </div>
-        
-        <!-- Mobile menu -->
-        <div class="md:hidden hidden bg-darker/90 backdrop-blur-md w-full absolute" id="mobile-menu">
-            <div class="container mx-auto px-4 py-4">
-                <ul class="flex flex-col space-y-4">
-                    <li><a href="index.html#home" class="block py-2 text-light hover:text-primary transition-colors">Home</a></li>
-                    <li><a href="index.html#about" class="block py-2 text-light hover:text-primary transition-colors">About</a></li>
-                    <li><a href="index.html#skills" class="block py-2 text-light hover:text-primary transition-colors">Skills</a></li>
-                    <li><a href="projects.html" class="block py-2 text-primary transition-colors">Projects</a></li>
-                    <li><a href="index.html#services" class="block py-2 text-light hover:text-primary transition-colors">Services</a></li>
-                    <li><a href="index.html#contact" class="block py-2 text-light hover:text-primary transition-colors">Contact</a></li>
-                    <li><a href="index.html#contact" class="block py-2 text-primary font-medium">Hire Me</a></li>
-                </ul>
-            </div>
-        </div>
-    </header>
+{% extends 'master.html' %}
 
-    <!-- Page Header -->
-    <section class="pt-32 pb-20 relative">
-        <div class="container mx-auto px-4 relative z-10">
-            <div class="text-center" data-aos="fade-up">
-                <div class="text-sm font-medium text-primary mb-2 tracking-wider">MY PORTFOLIO</div>
-                <h1 class="text-4xl md:text-5xl font-bold mb-4">All Projects</h1>
-                <p class="text-gray-400 max-w-2xl mx-auto">
-                    A comprehensive showcase of my work across various technologies and domains.
-                    Browse, filter, and explore my projects to see my skills in action.
-                </p>
-            </div>
+{% block content %}
+<!-- Projects Header -->
+<section class="pt-32 pb-20 relative">
+    <div class="container mx-auto px-4 relative z-10">
+        <div class="text-center max-w-3xl mx-auto">
+            <h1 class="text-4xl md:text-5xl font-bold mb-6" data-aos="fade-up">My Projects</h1>
+            <p class="text-gray-300 text-lg mb-12" data-aos="fade-up" data-aos-delay="100">
+                Explore my portfolio of web development projects, showcasing a diverse range of skills and technologies.
+            </p>
         </div>
         
+        <!-- Projects Section -->
+        <section class="py-20 relative">
+            <div class="container mx-auto px-4">
+                <div class="text-center mb-12">
+                    <h2 class="text-4xl font-bold mb-4">My Projects</h2>
+                    <p class="text-gray-400 max-w-2xl mx-auto">Explore my portfolio of web development projects, showcasing my skills and expertise in creating modern, responsive, and user-friendly applications.</p>
+                </div>
+
+                <!-- Search and Filter Controls -->
+                <div class="mb-8">
+                    <div class="flex flex-col md:flex-row gap-4 items-center justify-between">
+                        <!-- Search Input -->
+                        <div class="w-full md:w-96">
+                            <input type="text" 
+                                   name="search" 
+                                   placeholder="Search projects..." 
+                                   class="w-full px-4 py-2 bg-dark border border-dark rounded-md text-light focus:outline-none focus:border-primary"
+                                   hx-get="{% url 'filter_projects' %}"
+                                   hx-trigger="keyup changed delay:500ms, search"
+                                   hx-target="#projects-grid"
+                                   hx-push-url="true">
+                        </div>
+
+                        <!-- Sort Dropdown -->
+                        <div class="w-full md:w-48">
+                            <select name="sort" 
+                                    class="w-full px-4 py-2 bg-dark border border-dark rounded-md text-light focus:outline-none focus:border-primary"
+                                    hx-get="{% url 'filter_projects' %}"
+                                    hx-trigger="change"
+                                    hx-target="#projects-grid"
+                                    hx-push-url="true">
+                                <option value="newest">Sort by: Newest</option>
+                                <option value="oldest">Sort by: Oldest</option>
+                                <option value="name">Sort by: Name</option>
+                            </select>
+                        </div>
+
+                        <!-- Advanced Filters Toggle Button -->
+                        <button id="toggle-filters" 
+                                class="px-4 py-2 bg-dark border border-dark rounded-md text-light hover:bg-dark/80 transition-colors flex items-center gap-2">
+                            <span>Advanced Filters</span>
+                            <svg class="w-5 h-5 transform transition-transform duration-300" id="filter-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </button>
+                    </div>
+
+                    <!-- Advanced Filters (Initially Hidden) -->
+                    <div id="advanced-filters" class="hidden mt-6 p-4 bg-dark rounded-lg">
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            <!-- Technologies -->
+                            <div>
+                                <h3 class="text-lg font-semibold mb-3">Technologies</h3>
+                                <div class="space-y-2">
+                                    {% for tech in technologies %}
+                                    <label class="flex items-center space-x-2">
+                                        <input type="checkbox" 
+                                               name="technologies" 
+                                               value="{{ tech.id }}"
+                                               class="form-checkbox text-primary rounded border-dark bg-dark"
+                                               hx-get="{% url 'filter_projects' %}"
+                                               hx-trigger="change"
+                                               hx-target="#projects-grid"
+                                               hx-push-url="true">
+                                        <span class="text-light">{{ tech.name }}</span>
+                                    </label>
+                                    {% endfor %}
+                                </div>
+                            </div>
+
+                            <!-- Categories -->
+                            <div>
+                                <h3 class="text-lg font-semibold mb-3">Categories</h3>
+                                <div class="space-y-2">
+                                    {% for category in categories %}
+                                    <label class="flex items-center space-x-2">
+                                        <input type="checkbox" 
+                                               name="categories" 
+                                               value="{{ category.id }}"
+                                               class="form-checkbox text-primary rounded border-dark bg-dark"
+                                               hx-get="{% url 'filter_projects' %}"
+                                               hx-trigger="change"
+                                               hx-target="#projects-grid"
+                                               hx-push-url="true">
+                                        <span class="text-light">{{ category.name }}</span>
+                                    </label>
+                                    {% endfor %}
+                                </div>
+                            </div>
+
+                            <!-- Years -->
+                            <div>
+                                <h3 class="text-lg font-semibold mb-3">Years</h3>
+                                <div class="space-y-2">
+                                    {% for year in years %}
+                                    <label class="flex items-center space-x-2">
+                                        <input type="checkbox" 
+                                               name="years" 
+                                               value="{{ year }}"
+                                               class="form-checkbox text-primary rounded border-dark bg-dark"
+                                               hx-get="{% url 'filter_projects' %}"
+                                               hx-trigger="change"
+                                               hx-target="#projects-grid"
+                                               hx-push-url="true">
+                                        <span class="text-light">{{ year }}</span>
+                                    </label>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Clear All Filters Button -->
+                        <div class="mt-4 text-center">
+                            <button onclick="clearAllFilters()" 
+                                    class="px-6 py-2 bg-dark border border-dark rounded-md text-light hover:bg-dark/80 transition-colors">
+                                Clear all filters
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Projects Grid -->
+                <div id="projects-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    {% include 'projects_grid.html' %}
+                </div>
+
+                <!-- Pagination -->
+                <div class="mt-12 flex justify-center">
+                    <div class="flex space-x-2">
+                        {% if projects.has_previous %}
+                        <a href="?page={{ projects.previous_page_number }}" 
+                           class="px-4 py-2 bg-dark border border-dark rounded-md text-light hover:bg-dark/80 transition-colors">
+                            Previous
+                        </a>
+                        {% endif %}
+                        
+                        {% for num in projects.paginator.page_range %}
+                            {% if projects.number == num %}
+                            <span class="px-4 py-2 bg-primary border border-primary rounded-md text-light">
+                                {{ num }}
+                            </span>
+                            {% else %}
+                            <a href="?page={{ num }}" 
+                               class="px-4 py-2 bg-dark border border-dark rounded-md text-light hover:bg-dark/80 transition-colors">
+                                {{ num }}
+                            </a>
+                            {% endif %}
+                        {% endfor %}
+                        
+                        {% if projects.has_next %}
+                        <a href="?page={{ projects.next_page_number }}" 
+                           class="px-4 py-2 bg-dark border border-dark rounded-md text-light hover:bg-dark/80 transition-colors">
+                            Next
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Custom Shape Divider -->
         <div class="custom-shape-divider-bottom-1">
             <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
                 <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z" class="shape-fill"></path>
             </svg>
         </div>
-    </section>
+    </div>
+</section>
 
-    <!-- Projects Section -->
-    <section class="py-16 bg-gray-900">
-        <div class="container mx-auto px-4">
-            <!-- Search and Filter Controls -->
-            <div class="mb-12 bg-dark rounded-xl p-6" data-aos="fade-up">
-                <div class="flex flex-col md:flex-row gap-6">
-                    <!-- Search -->
-                    <div class="md:w-1/3">
-                        <div class="relative">
-                            <input type="text" 
-                                id="search-input" 
-                                name="search"
-                                placeholder="Search projects..." 
-                                class="w-full px-4 py-3 bg-darker border border-gray-700 rounded-lg focus:outline-none focus:border-primary search-input text-light"
-                                hx-get="{% url 'filter_projects' %}"
-                                hx-trigger="keyup changed delay:500ms"
-                                hx-target="#projects-container"
-                                hx-include=".filter-checkbox:checked">
-                            <button class="absolute right-3 top-3 text-gray-400">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                                </svg>
-                            </button>
-                        </div>
-                    </div>
-                    
-                    <!-- Sort -->
-                    <div class="md:w-1/3">
-                        <div class="relative dropdown">
-                            <button class="w-full px-4 py-3 bg-darker border border-gray-700 rounded-lg flex justify-between items-center text-light">
-                                <span id="sort-label">Sort by: Newest</span>
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                                </svg>
-                            </button>
-                            <div class="dropdown-menu mt-2 w-full bg-darker border border-gray-700 rounded-lg shadow-xl py-2">
-                                <a href="#" 
-                                    class="block px-4 py-2 hover:bg-primary/10 hover:text-primary transition-colors sort-option" 
-                                    hx-get="{% url 'filter_projects' %}"
-                                    hx-target="#projects-container"
-                                    hx-include=".filter-checkbox:checked, #search-input"
-                                    hx-vals='{"sort": "newest"}'
-                                    onclick="updateSortLabel(this, 'Newest')">Newest</a>
-                                <a href="#" 
-                                    class="block px-4 py-2 hover:bg-primary/10 hover:text-primary transition-colors sort-option"
-                                    hx-get="{% url 'filter_projects' %}"
-                                    hx-target="#projects-container"
-                                    hx-include=".filter-checkbox:checked, #search-input"
-                                    hx-vals='{"sort": "oldest"}'
-                                    onclick="updateSortLabel(this, 'Oldest')">Oldest</a>
-                                <a href="#" 
-                                    class="block px-4 py-2 hover:bg-primary/10 hover:text-primary transition-colors sort-option"
-                                    hx-get="{% url 'filter_projects' %}"
-                                    hx-target="#projects-container"
-                                    hx-include=".filter-checkbox:checked, #search-input"
-                                    hx-vals='{"sort": "name-asc"}'
-                                    onclick="updateSortLabel(this, 'Name (A-Z)')">Name (A-Z)</a>
-                                <a href="#" 
-                                    class="block px-4 py-2 hover:bg-primary/10 hover:text-primary transition-colors sort-option"
-                                    hx-get="{% url 'filter_projects' %}"
-                                    hx-target="#projects-container"
-                                    hx-include=".filter-checkbox:checked, #search-input"
-                                    hx-vals='{"sort": "name-desc"}'
-                                    onclick="updateSortLabel(this, 'Name (Z-A)')">Name (Z-A)</a>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- View Toggle and Advanced Filters Button -->
-                    <div class="md:w-1/3">
-                        <div class="flex justify-end gap-4">
-                            <div class="inline-flex rounded-lg border border-gray-700 overflow-hidden">
-                                <button class="px-4 py-3 bg-darker text-light hover:bg-primary/10 transition-colors view-toggle active" data-view="grid">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
-                                    </svg>
-                                </button>
-                                <button class="px-4 py-3 bg-darker text-light hover:bg-primary/10 transition-colors view-toggle" data-view="list">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-                                    </svg>
-                                </button>
-                            </div>
-                            <button id="toggle-filters" class="px-4 py-3 bg-darker text-light hover:bg-primary/10 transition-colors rounded-lg border border-gray-700 flex items-center gap-2">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
-                                </svg>
-                                <span>Advanced Filters</span>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Advanced Filters (Hidden by default) -->
-                <div id="advanced-filters" class="hidden mt-6 pt-6 border-t border-gray-700">
-                    <div class="flex justify-between items-center mb-4">
-                        <h3 class="font-semibold">Filters</h3>
-                        <button 
-                            class="text-sm text-primary hover:underline"
-                            hx-get="{% url 'filter_projects' %}"
-                            hx-target="#projects-container"
-                            onclick="clearAllFilters()"
-                        >Clear all filters</button>
-                    </div>
-                    
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                        <!-- Categories -->
-                        <div>
-                            <h4 class="text-sm font-medium mb-3">Categories</h4>
-                            <div class="space-y-2">
-                                <label class="flex items-center">
-                                    <input type="checkbox" 
-                                        class="checkbox-primary mr-2 h-4 w-4 filter-checkbox" 
-                                        value="web"
-                                        hx-get="{% url 'filter_projects' %}"
-                                        hx-trigger="change"
-                                        hx-target="#projects-container"
-                                        hx-include=".filter-checkbox:checked"
-                                        name="categories">
-                                    <span>Web Development</span>
-                                </label>
-                                <label class="flex items-center">
-                                    <input type="checkbox" 
-                                        class="checkbox-primary mr-2 h-4 w-4 filter-checkbox" 
-                                        value="mobile"
-                                        hx-get="{% url 'filter_projects' %}"
-                                        hx-trigger="change"
-                                        hx-target="#projects-container"
-                                        hx-include=".filter-checkbox:checked"
-                                        name="categories">
-                                    <span>Mobile Apps</span>
-                                </label>
-                                <label class="flex items-center">
-                                    <input type="checkbox" 
-                                        class="checkbox-primary mr-2 h-4 w-4 filter-checkbox" 
-                                        value="ui"
-                                        hx-get="{% url 'filter_projects' %}"
-                                        hx-trigger="change"
-                                        hx-target="#projects-container"
-                                        hx-include=".filter-checkbox:checked"
-                                        name="categories">
-                                    <span>UI/UX Design</span>
-                                </label>
-                                <label class="flex items-center">
-                                    <input type="checkbox" 
-                                        class="checkbox-primary mr-2 h-4 w-4 filter-checkbox" 
-                                        value="backend"
-                                        hx-get="{% url 'filter_projects' %}"
-                                        hx-trigger="change"
-                                        hx-target="#projects-container"
-                                        hx-include=".filter-checkbox:checked"
-                                        name="categories">
-                                    <span>Backend</span>
-                                </label>
-                            </div>
-                        </div>
-                        
-                        <!-- Technologies -->
-                        <div>
-                            <h4 class="text-sm font-medium mb-3">Technologies</h4>
-                            <div class="space-y-2">
-                                {% for tech in techs %}
-                                    <label class="flex items-center">
-                                        <input type="checkbox" 
-                                            class="checkbox-primary mr-2 h-4 w-4 filter-checkbox" 
-                                            value="{{ tech.name }}"
-                                            hx-get="{% url 'filter_projects' %}"
-                                            hx-trigger="change"
-                                            hx-target="#projects-container"
-                                            hx-include=".filter-checkbox:checked"
-                                            name="techs">
-                                        <span>{{ tech.name }}</span>
-                                    </label>
-                                {% endfor %}
-                            </div>
-                        </div>
-                        
-                        <!-- Year -->
-                        <div>
-                            <h4 class="text-sm font-medium mb-3">Year</h4>
-                            <div class="space-y-2">
-                                <label class="flex items-center">
-                                    <input type="checkbox" 
-                                        class="checkbox-primary mr-2 h-4 w-4 filter-checkbox" 
-                                        value="2023"
-                                        hx-get="{% url 'filter_projects' %}"
-                                        hx-trigger="change"
-                                        hx-target="#projects-container"
-                                        hx-include=".filter-checkbox:checked"
-                                        name="years">
-                                    <span>2023</span>
-                                </label>
-                                <label class="flex items-center">
-                                    <input type="checkbox" 
-                                        class="checkbox-primary mr-2 h-4 w-4 filter-checkbox" 
-                                        value="2022"
-                                        hx-get="{% url 'filter_projects' %}"
-                                        hx-trigger="change"
-                                        hx-target="#projects-container"
-                                        hx-include=".filter-checkbox:checked"
-                                        name="years">
-                                    <span>2022</span>
-                                </label>
-                                <label class="flex items-center">
-                                    <input type="checkbox" 
-                                        class="checkbox-primary mr-2 h-4 w-4 filter-checkbox" 
-                                        value="2021"
-                                        hx-get="{% url 'filter_projects' %}"
-                                        hx-trigger="change"
-                                        hx-target="#projects-container"
-                                        hx-include=".filter-checkbox:checked"
-                                        name="years">
-                                    <span>2021</span>
-                                </label>
-                                <label class="flex items-center">
-                                    <input type="checkbox" 
-                                        class="checkbox-primary mr-2 h-4 w-4 filter-checkbox" 
-                                        value="2020"
-                                        hx-get="{% url 'filter_projects' %}"
-                                        hx-trigger="change"
-                                        hx-target="#projects-container"
-                                        hx-include=".filter-checkbox:checked"
-                                        name="years">
-                                    <span>2020 & Earlier</span>
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Active Filters -->
-                    <div class="mt-6 flex flex-wrap gap-2" id="active-filters">
-                        <!-- Active filters will be added here dynamically -->
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Results Summary -->
-            <div class="mb-6 flex justify-between items-center" data-aos="fade-up">
-                <div class="text-gray-400">
-                    Showing <span id="showing-count">{{ projects.start_index }}-{{ projects.end_index }}</span> of <span id="total-count">{{ total_projects }}</span> projects
-                </div>
-                <div class="text-gray-400">
-                    Page <span id="current-page">{{ current_page }}</span> of <span id="total-pages">{{ total_pages }}</span>
-                </div>
-            </div>
+<!-- HTMX Script -->
+<script src="https://unpkg.com/htmx.org@1.9.10"></script>
 
-            <!-- Grid View (Default) -->
-            <div id="projects-container" class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {% include "partials/project_list.html" with projects=projects %}
-            </div>
-
-            <!-- List View (Hidden by default) -->
-            <div id="list-view" class="hidden space-y-6 mb-12">
-                <!-- List items will be dynamically generated with JavaScript -->
-            </div>
-            
-            <!-- Pagination -->
-            <div class="flex justify-center mt-12" data-aos="fade-up">
-                <div class="inline-flex rounded-md shadow-sm">
-                    {% if has_previous %}
-                        <a href="?page={{ previous_page }}" 
-                           class="px-4 py-2 text-sm font-medium text-gray-400 bg-darker border border-gray-700 rounded-l-lg hover:bg-primary/10 hover:text-primary">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-                            </svg>
-                        </a>
-                    {% endif %}
-
-                    {% for num in projects.paginator.page_range %}
-                        {% if num == current_page %}
-                            <a href="?page={{ num }}" 
-                               class="px-4 py-2 text-sm font-medium text-white bg-primary border border-primary pagination-link pagination-active">
-                                {{ num }}
-                            </a>
-                        {% elif num > current_page|add:'-3' and num < current_page|add:'3' %}
-                            <a href="?page={{ num }}" 
-                               class="px-4 py-2 text-sm font-medium text-gray-400 bg-darker border border-gray-700 hover:bg-primary/10 hover:text-primary pagination-link">
-                                {{ num }}
-                            </a>
-                        {% endif %}
-                    {% endfor %}
-
-                    {% if has_next %}
-                        <a href="?page={{ next_page }}" 
-                           class="px-4 py-2 text-sm font-medium text-gray-400 bg-darker border border-gray-700 rounded-r-lg hover:bg-primary/10 hover:text-primary">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                            </svg>
-                        </a>
-                    {% endif %}
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Call to Action -->
-    <section class="py-20 bg-dark relative overflow-hidden">
-        <div class="container mx-auto px-4 relative z-10">
-            <div class="bg-gradient-to-r from-primary/20 to-secondary/20 rounded-2xl p-12 text-center" data-aos="fade-up">
-                <h2 class="text-3xl font-bold mb-6">Have a project in mind?</h2>
-                <p class="text-gray-300 max-w-2xl mx-auto mb-8">
-                    I'm currently available for freelance work. If you have a project that you want to get started or need help with something, feel free to contact me.
-                </p>
-                <a href="index.html#contact" class="gradient-border bg-darker px-8 py-3 rounded-md text-light font-medium inline-flex items-center">
-                    <span>Let's Work Together</span>
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+<!-- Active Filters Script -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    function updateActiveFilters() {
+        const activeFilters = document.getElementById('active-filters');
+        activeFilters.innerHTML = '';
+        
+        // Get all checked checkboxes
+        const checkedBoxes = document.querySelectorAll('input[type="checkbox"]:checked');
+        checkedBoxes.forEach(box => {
+            const filter = document.createElement('div');
+            filter.className = 'bg-darker border border-gray-700 rounded-full px-4 py-1 flex items-center space-x-2';
+            filter.innerHTML = `
+                <span class="text-gray-300">${box.value}</span>
+                <button class="text-gray-400 hover:text-primary" onclick="removeFilter(this, '${box.name}', '${box.value}')">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                     </svg>
-                </a>
-            </div>
-        </div>
-        
-        <div class="absolute top-0 right-0 w-1/3 h-full opacity-10">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
-                <path fill="#8B5CF6" d="M37.5,-48.1C52.1,-40.3,69.7,-33.9,75.9,-21.7C82,-9.6,76.8,8.3,68.9,23.5C61,38.7,50.4,51.1,37.5,58.2C24.6,65.4,9.4,67.3,-4.3,72.1C-18,76.9,-30.2,84.6,-42.1,80.9C-54,77.3,-65.5,62.3,-70.3,46.6C-75.1,30.9,-73.1,14.4,-70.8,-1.3C-68.5,-17.1,-65.9,-32.2,-57.2,-41.7C-48.6,-51.2,-33.9,-55,-20.8,-62.1C-7.7,-69.2,3.8,-79.6,14.2,-76.8C24.6,-74,34.9,-58,37.5,-48.1Z" transform="translate(100 100)" />
-            </svg>
-        </div>
-        
-        <div class="absolute bottom-0 left-0 w-1/3 h-full opacity-10">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
-                <path fill="#EC4899" d="M45.3,-51.2C58.9,-42.9,70.3,-28.4,74.9,-11.7C79.4,5,77.2,23.8,67.4,36.8C57.6,49.8,40.3,57,22.7,63.4C5.2,69.8,-12.6,75.3,-27.4,70.9C-42.2,66.5,-54,52.1,-62.3,36.1C-70.6,20.1,-75.4,2.4,-71.5,-13C-67.6,-28.4,-55,-41.6,-41.2,-49.8C-27.4,-58,-13.7,-61.2,1.2,-62.6C16.1,-64,31.7,-59.5,45.3,-51.2Z" transform="translate(100 100)" />
-            </svg>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="py-8 bg-darker border-t border-gray-800">
-        <div class="container mx-auto px-4 text-center">
-            <div class="text-2xl font-bold mb-4">
-                <span class="gradient-text">&lt;/&gt;</span> DevMaster
-            </div>
-            <p class="text-gray-400 mb-6">
-                Creating exceptional digital experiences with modern technologies.
-            </p>
-            <div class="flex justify-center space-x-6 mb-8">
-                <a href="#" class="text-gray-400 hover:text-primary transition-colors">
-                    <i class="fab fa-github text-xl"></i>
-                </a>
-                <a href="#" class="text-gray-400 hover:text-primary transition-colors">
-                    <i class="fab fa-linkedin-in text-xl"></i>
-                </a>
-                <a href="#" class="text-gray-400 hover:text-primary transition-colors">
-                    <i class="fab fa-twitter text-xl"></i>
-                </a>
-                <a href="#" class="text-gray-400 hover:text-primary transition-colors">
-                    <i class="fab fa-dribbble text-xl"></i>
-                </a>
-            </div>
-            <p class="text-gray-500 text-sm">
-                &copy; <span id="current-year"></span> Alex Johnson. All rights reserved.
-            </p>
-        </div>
-    </footer>
-
-    <!-- Back to Top Button -->
-    <button id="back-to-top" class="fixed bottom-6 right-6 bg-primary hover:bg-secondary text-white w-12 h-12 rounded-full flex items-center justify-center shadow-lg transition-all opacity-0 invisible">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18" />
-        </svg>
-    </button>
-
-    <!-- Scripts -->
-    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
-    <script>
-        // Initialize AOS
-        AOS.init({
-            duration: 800,
-            once: true
+                </button>
+            `;
+            activeFilters.appendChild(filter);
         });
         
-        // Vanta.js Background
-        VANTA.NET({
-            el: "#vanta-bg",
-            mouseControls: true,
-            touchControls: true,
-            gyroControls: false,
-            minHeight: 200.00,
-            minWidth: 200.00,
-            scale: 1.00,
-            scaleMobile: 1.00,
-            color: 0x8B5CF6,
-            backgroundColor: 0x0F172A,
-            points: 10.00,
-            maxDistance: 25.00,
-            spacing: 16.00
-        });
-        
-        // Preloader
-        window.addEventListener('load', function() {
-            const preloader = document.getElementById('preloader');
-            setTimeout(function() {
-                preloader.style.opacity = '0';
-                setTimeout(function() {
-                    preloader.style.display = 'none';
-                }, 500);
-            }, 1000);
-        });
-        
-        // Mobile Menu Toggle
-        const menuToggle = document.getElementById('menu-toggle');
-        const mobileMenu = document.getElementById('mobile-menu');
-        
-        menuToggle.addEventListener('click', function() {
-            mobileMenu.classList.toggle('hidden');
-        });
-        
-        // Header Scroll Effect
-        const header = document.getElementById('header');
-        
-        window.addEventListener('scroll', function() {
-            if (window.scrollY > 50) {
-                header.classList.add('bg-darker/80', 'backdrop-blur-md', 'shadow-md');
-            } else {
-                header.classList.remove('bg-darker/80', 'backdrop-blur-md', 'shadow-md');
-            }
-        });
-        
-        // Back to Top Button
-        const backToTopButton = document.getElementById('back-to-top');
-        
-        window.addEventListener('scroll', function() {
-            if (window.scrollY > 300) {
-                backToTopButton.classList.remove('opacity-0', 'invisible');
-                backToTopButton.classList.add('opacity-100', 'visible');
-            } else {
-                backToTopButton.classList.add('opacity-0', 'invisible');
-                backToTopButton.classList.remove('opacity-100', 'visible');
-            }
-        });
-        
-        backToTopButton.addEventListener('click', function() {
-            window.scrollTo({
-                top: 0,
-                behavior: 'smooth'
-            });
-        });
-        
-        // Current Year
-        document.getElementById('current-year').textContent = new Date().getFullYear();
-    </script>
-    <script>
-        function clearAllFilters() {
-            // Clear search input
-            document.getElementById('search-input').value = '';
-            
-            // Clear all checkboxes
-            document.querySelectorAll('.filter-checkbox').forEach(checkbox => {
-                checkbox.checked = false;
-            });
-            
-            // Reset sort label
-            document.getElementById('sort-label').textContent = 'Sort by: Newest';
+        // Get search input value
+        const searchInput = document.querySelector('input[name="search"]');
+        if (searchInput && searchInput.value.trim()) {
+            const filter = document.createElement('div');
+            filter.className = 'bg-darker border border-gray-700 rounded-full px-4 py-1 flex items-center space-x-2';
+            filter.innerHTML = `
+                <span class="text-gray-300">Search: ${searchInput.value}</span>
+                <button class="text-gray-400 hover:text-primary" onclick="clearSearch()">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            `;
+            activeFilters.appendChild(filter);
         }
-    </script>
-    <script>
-    function updateSortLabel(element, label) {
-        document.getElementById('sort-label').textContent = 'Sort by: ' + label;
     }
-    </script>
-    <script>
-        // Toggle Advanced Filters
-        const toggleFiltersBtn = document.getElementById('toggle-filters');
-        const advancedFilters = document.getElementById('advanced-filters');
-        
-        toggleFiltersBtn.addEventListener('click', function() {
-            advancedFilters.classList.toggle('hidden');
-            // Update button text and icon
-            const buttonText = toggleFiltersBtn.querySelector('span');
-            const buttonIcon = toggleFiltersBtn.querySelector('svg');
-            
-            if (advancedFilters.classList.contains('hidden')) {
-                buttonText.textContent = 'Advanced Filters';
-                buttonIcon.classList.remove('rotate-180');
-            } else {
-                buttonText.textContent = 'Hide Filters';
-                buttonIcon.classList.add('rotate-180');
-            }
-        });
-    </script>
-    <script>
-        // Update pagination links to maintain filters
-        document.addEventListener('DOMContentLoaded', function() {
-            const paginationLinks = document.querySelectorAll('.pagination-link');
-            paginationLinks.forEach(link => {
-                link.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    const page = this.getAttribute('href').split('=')[1];
-                    const currentUrl = new URL(window.location.href);
-                    currentUrl.searchParams.set('page', page);
-                    
-                    // Include current filters in the URL
-                    const searchInput = document.getElementById('search-input');
-                    const filterCheckboxes = document.querySelectorAll('.filter-checkbox:checked');
-                    
-                    if (searchInput.value) {
-                        currentUrl.searchParams.set('search', searchInput.value);
-                    }
-                    
-                    filterCheckboxes.forEach(checkbox => {
-                        const name = checkbox.getAttribute('name');
-                        if (!currentUrl.searchParams.has(name)) {
-                            currentUrl.searchParams.set(name, checkbox.value);
-                        } else {
-                            currentUrl.searchParams.append(name, checkbox.value);
-                        }
-                    });
-                    
-                    window.location.href = currentUrl.toString();
-                });
-            });
-        });
-    </script>
-</body>
-</html>
+    
+    // Update active filters when any checkbox changes
+    document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+        checkbox.addEventListener('change', updateActiveFilters);
+    });
+    
+    // Update active filters when search input changes
+    document.querySelector('input[name="search"]').addEventListener('input', updateActiveFilters);
+    
+    // Initial update
+    updateActiveFilters();
+});
+
+function removeFilter(button, filterName, filterValue) {
+    const checkbox = document.querySelector(`input[name="${filterName}"][value="${filterValue}"]`);
+    if (checkbox) {
+        checkbox.checked = false;
+        checkbox.dispatchEvent(new Event('change'));
+    }
+}
+
+function clearSearch() {
+    const searchInput = document.querySelector('input[name="search"]');
+    if (searchInput) {
+        searchInput.value = '';
+        searchInput.dispatchEvent(new Event('input'));
+        searchInput.dispatchEvent(new Event('change'));
+    }
+}
+
+// Toggle Advanced Filters
+const toggleFiltersBtn = document.getElementById('toggle-filters');
+const advancedFilters = document.getElementById('advanced-filters');
+const filterIcon = document.getElementById('filter-icon');
+
+toggleFiltersBtn.addEventListener('click', () => {
+    advancedFilters.classList.toggle('hidden');
+    filterIcon.classList.toggle('rotate-180');
+});
+
+// Clear All Filters
+function clearAllFilters() {
+    // Clear search input
+    const searchInput = document.querySelector('input[name="search"]');
+    if (searchInput) searchInput.value = '';
+
+    // Uncheck all checkboxes
+    const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+    checkboxes.forEach(checkbox => checkbox.checked = false);
+
+    // Reset sort dropdown
+    const sortSelect = document.querySelector('select[name="sort"]');
+    if (sortSelect) sortSelect.value = 'newest';
+
+    // Trigger HTMX request to refresh the grid
+    htmx.trigger('#projects-grid', 'refresh');
+}
+</script>
+{% endblock %}

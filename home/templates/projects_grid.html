@@ -1,0 +1,60 @@
+{% for project in projects %}
+<div class="bg-dark rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300" data-aos="fade-up">
+    <!-- Project Image -->
+    <div class="relative h-48 overflow-hidden">
+        {% if project.image %}
+        <img src="{{ project.image.url }}" 
+             alt="{{ project.title }}" 
+             class="w-full h-full object-cover transform hover:scale-110 transition-transform duration-300">
+        {% else %}
+        <div class="w-full h-full bg-darker flex items-center justify-center">
+            <span class="text-gray-500">No image available</span>
+        </div>
+        {% endif %}
+        
+        <!-- Project Category -->
+        {% if project.category %}
+        <div class="absolute top-4 right-4">
+            <span class="px-3 py-1 bg-primary/90 text-light rounded-full text-sm">
+                {{ project.category.name }}
+            </span>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Project Content -->
+    <div class="p-6">
+        <h3 class="text-xl font-bold mb-2 text-light">{{ project.title }}</h3>
+        <p class="text-gray-400 mb-4 line-clamp-2">{{ project.description }}</p>
+        
+        <!-- Technologies -->
+        <div class="flex flex-wrap gap-2 mb-4">
+            {% for tech in project.technologies.all %}
+            <span class="px-2 py-1 bg-darker text-gray-300 rounded text-sm">
+                {{ tech.name }}
+            </span>
+            {% endfor %}
+        </div>
+
+        <!-- Project Links -->
+        <div class="flex justify-between items-center">
+            <a href="{% url 'single-project' project.id %}" 
+               class="text-primary hover:text-primary/80 transition-colors">
+                View Details →
+            </a>
+            {% if project.project_url %}
+            <a href="{{ project.project_url }}" 
+               target="_blank" 
+               rel="noopener noreferrer"
+               class="text-primary hover:text-primary/80 transition-colors">
+                Live Demo →
+            </a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% empty %}
+<div class="col-span-full text-center py-12">
+    <p class="text-gray-400 text-lg">No projects found matching your criteria.</p>
+</div>
+{% endfor %} 

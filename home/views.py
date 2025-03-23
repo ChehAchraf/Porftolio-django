@@ -5,12 +5,41 @@ from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 # Create your views here.
 
 def home(request):
-    personal_info = PersonalInfo.objects.get(id=1)
+    try:
+        personal_info = PersonalInfo.objects.first()  # Get the first PersonalInfo object or None
+        if not personal_info:
+            # Create a default PersonalInfo object if none exists
+            personal_info = PersonalInfo.objects.create(
+                name="Ashraf Cheboun",
+                email="example@email.com",
+                phone="+1234567890",
+                address="Your Address",
+                bio="Full Stack Developer",
+                long_bio="Experienced Full Stack Developer",
+                years_of_experience="5",
+                completed_projects="50",
+                awards="10",
+                happy_clients="40",
+                status="Available",
+            )
+    except Exception as e:
+        print(f"Error getting personal info: {e}")
+        personal_info = None
+
     front_end_technologies = TechnichalExpertise.objects.filter(category='front-end')
     back_end_technologies = TechnichalExpertise.objects.filter(category='back-end')
     technology = Technology.objects.all()
     project = Project.objects.all().order_by('-created_at')[:6]
-    return render(request, 'home.html' , {'ashraf':personal_info,'front_end_technologies':front_end_technologies,'back_end_technologies':back_end_technologies,'technology':technology,'project':project})
+    
+    context = {
+        'ashraf': personal_info,
+        'front_end_technologies': front_end_technologies,
+        'back_end_technologies': back_end_technologies,
+        'technology': technology,
+        'project': project,
+    }
+    
+    return render(request, 'home.html', context)
 
 
 def single_project(request, id):
@@ -121,3 +150,22 @@ def filter_projects(request):
     print(f"Context being passed to template: {context}")
     
     return render(request, "partials/project_list.html", context)
+
+def project_detail(request, slug):
+    project = Project.objects.select_related('detail').prefetch_related(
+        'technology',
+        'detail__metrics',
+        'gallery_images',
+        'detail__development_stages',
+        'detail__challenges'
+    ).get(slug=slug)
+    
+    context = {
+        'project': project,
+        'project_detail': project.detail,
+        'gallery_images': project.gallery_images.all(),
+        'devstage': project.detail.development_stages.all(),
+        'ch': project.detail.challenges.all(),
+    }
+    
+    return render(request, 'single-project.html', context)
